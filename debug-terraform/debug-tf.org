@@ -1,0 +1,106 @@
+#+TITLE: Quelques astuces pour débogguer Terraform
+#+AUTHOR: Dominique Dumont
+#+EMAIL: dominique@code-straight.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil ^:{}
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+
+# audience: all
+
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Contributeur Open-Source depuis 1996
+- Debian Developer depuis 2011
+- Freelance devops depuis 2020
+# ajouter LinkedIn et site web code-straight.fr
+
+* Terraform - Petit rappel
+** Infra as Code
+
+- Terraform fournit un language en =HCL= pour décrire:
+  - les ressources
+  - les relations entre ces ressources
+  - les paramètres d'entrée (e.g. env =dev= vs =prod=)
+
+#+begin_src hcl
+  resource "azurerm_servicebus_namespace" "default" {
+    name                = local.cluster-name
+    location            = var.location
+    resource_group_name = azurerm_resource_group.cluster.name
+    sku                 = "Basic"
+  }
+#+end_src
+
+* Terraform - Debug des instructions
+
+Terraform fournit des [[https://developer.hashicorp.com/terraform/language/expressions][expressions]] et des [[https://developer.hashicorp.com/terraform/language/functions][fonctions]] avancées pour
+transformer des données.
+
+Par exemple:
+
+- [[https://developer.hashicorp.com/terraform/language/expressions/for][for expressions]]
+- [[https://developer.hashicorp.com/terraform/language/functions/setproduct][setproduct]] function
+- [[https://developer.hashicorp.com/terraform/language/functions/cidrsubnet][cidrsubnet]]
+
+** Inconvénients
+
+- pas de =printf=
+- pas de =debugger= 
+
+** Solution 
+
+- [[https://developer.hashicorp.com/terraform/cli/commands/console][console Terraform]]:
+  - pour interroger le contenu du [[https://developer.hashicorp.com/terraform/language/state][tfstate]]
+  - pour évaluer des expressions
+- demo !
+
+** COMMENT Console - screenshot
+
+#+attr_html: :class pres-image
+[[file:console.png]]
+
+* Terraform - Trace
+** Archi Terraform
+
+#+BEGIN_SRC plantuml :file emg.png :eval no-export
+
+  @startuml
+
+  node "laptop" {
+          [ Terraform\nprocess] as tf
+          [ Provider\nprocess ] as provider
+  }
+
+  cloud {
+          [ Infra ] as Infra
+  }
+
+  tf -> provider : RPC
+  provider -> Infra : API calls
+
+#+END_SRC
+
+#+attr_html: :class pres-image
+#+RESULTS:
+[[file:emg.png]]
+
+** solutions
+
+Mettre en place des variables d'environnement:
+
+  - TF_LOG_CORE :: log pour le process Terraform
+  - TF_LOG_PROVIDER :: pour le process du provider
+  - TF_LOG :: pour tous les process
+
+See [[https://developer.hashicorp.com/terraform/internals/debugging][Debugging | Terraform | HashiCorp Developer]]
+
+** COMMENT TF_PROVIDER_LOG screenshot
+
+[[file:tf_provider_log.png]]
+
+** COMMENT Conclusion
+
+Debbuguer, c'est bien.
+
+Prévenir les erreurs, c'est mieux -> assertions en Terraform.

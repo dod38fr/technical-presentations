@@ -1,0 +1,38 @@
+* Terraform console
+
+- lancer =terraform console= dans =vpc= dir:
+  - interroger des données (après =apply=):
+    #+begin_example
+    data.aws_vpc.default.cidr_block
+    module.subnet_addrs.network_cidr_block
+    #+end_example
+  - tester des instructions:
+    #+begin_example
+    [ for i in ["foo", "bar"] : upper(i) ]
+    setproduct(["foo","bar"], [ 1,2,3])
+    cidrsubnet("172.16.0.0/12", 4, 2)
+    #+end_example
+  - vérifier les accès à des données de config:
+    #+begin_example
+    yamldecode(file("config.yml"))
+    yamldecode(file("config.yml")).0.user.email
+    #+end_example
+
+* Terraform traces
+
+Créer un VPC et un subnet:
+
+#+BEGIN_SRC shell :results verbatim
+    TF_LOG_CORE=1 terraform apply
+#+END_SRC
+
+
+#+BEGIN_SRC shell :results verbatim
+  TF_LOG_PROVIDER=1 terraform apply
+#+END_SRC
+
+Nettoyage:
+#+BEGIN_SRC shell :results verbatim :dir vpc
+  terraform destroy -auto-approve
+#+END_SRC
+
