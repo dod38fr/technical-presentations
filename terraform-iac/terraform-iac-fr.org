@@ -1,0 +1,198 @@
+#+TITLE: Terraform - IAC - de quoi s'agit t'il ?
+#+AUTHOR: Dominique Dumont
+#+EMAIL: dominique@code-straight.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+
+# audience: all
+
+* COMMENT annonce
+ Terraform et /infrastructure as code/ - de quoi s'agit t'il ?
+
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Contributeur Open-Source depuis 1996
+- Debian Developer depuis 2011
+- Freelance devops depuis 2020
+
+* Problème à résoudre
+
+- déployer une infra pour héberger une application
+- déployer plusieurs environments (dev prod...)
+- la faire évoluer
+- déroules un Plan de Reprise d'Activité (PRA ou /DRP/)
+  
+* Première approche
+
+** La console
+
+#+attr_html: :class pres-image
+[[file:console-azure.png]]
+
+ok pour apprendre dans un environnement de dev
+  
+** Le problème
+
+Quant on veut faire l'environnement de prod, il faut:
+
+- avoir noté les détails de l'étape précédente
+- ne pas se tromper
+
+** Complication
+
+En cas de catastrophe (PRA):
+- il faut rejouer l'installation
+- sous stress
+- gros risque d'erreurs
+
+* COMMENT 2e approche
+
+** script avec CLI
+
+- jouer une série de commande comme ci-dessous:
+
+#+begin_example
+SP_SECRET=$(az ad sp credential reset --name $SP_ID --query password -o tsv)
+az aks update-credentials --resource-group cluster-dev --name k8s-dev \
+  --reset-service-principal --service-principal $SP_ID --client-secret $SP_SECRET
+#+end_example
+
+** Problème avec les CLIs
+
+- idempotence
+- complexité (extraction d'info des commandes et passages au suivant. E.g. resources uuid)
+- comment tester ?
+  
+** Complication avec les CLIs
+
+- en cas de catastrophe (PRA):
+  - comment paramétrer le programme quand certaines parties de l'infra
+    se sont pas tombées ?
+  - stress si besoin de modifier les scripts à la volée
+
+* Solution: infra as code
+
+** Principe
+
+- Décrire le résultat attendu
+- L'outil se débrouille pour déterminer les actions à faire en
+  fonction de l'état de l'infra et le résultat attendu.
+
+** Avantages
+
+- idempotence: on peut relancer la commande sans soucis en cas de problème
+- immutabilité: une modif faite dans votre dos est détectée et corrigée
+- facile de détruire l'infra (tests)
+- on peut archiver le code avec GIT
+- on peut appliquer les changements d'infra avec une CI/CD
+
+** Inconvénients
+
+- faut que l'infra offre une API (pas applicable sur /bare metal/)
+
+* Les outils d'IAC 
+
+** Terraform - HCL
+
+- Pour décrire:
+  - les ressources
+  - les relations entre ces ressources
+  - les paramètres d'entrée (e.g. env =dev= vs =prod=)
+
+#+begin_src hcl
+  resource "azurerm_servicebus_namespace" "default" {
+    name                = local.cluster-name
+    location            = var.location
+    resource_group_name = azurerm_resource_group.cluster.name
+    sku                 = "Basic"
+  }
+#+end_src
+
+*** Terraform - commandes
+
+- =terraform plan=: vérifier ce qui ca se passer
+- =terraform apply=: appliquer les changements
+- =terraform destroy=: tout détruire
+
+*** Terraform - Providers
+
+- Interface entre Terraform et les ressources dans le cloud
+- Beaucoup de [[https://registry.terraform.io/browse/providers][providers]]: Azure, AWS, GitHub, Kubernetes, OVH, CloudFlare, 
+
+*** Terraform - modules
+
+- Abstraction qui englobe plusieurs ressources, un peu comme une
+  librairie
+- Beaucoup de [[https://registry.terraform.io/browse/modules][modules disponibles]] 
+
+*** Cloud Formation
+
+- seulement pour AWS
+- YAML "enrichi" (exemple: =!Sub= =!Join=)
+- beaucoup moins souple que =HCL=
+
+#+begin_src yaml
+  PolicyDocument:
+    Id: CrossAccessPolicy
+    Statement:
+      - Sid: CrossAccPolicyDoc
+        Action: "s3:ListBucket"
+        Resource: !Sub 'arn:aws:s3:::${S3BUCKET}'
+        Principal:
+          AWS: !Join ['', ["arn:aws:iam::", !Ref PublisherAccountID, ":root"]]
+#+end_src
+  
+*** AWS CDK
+
+- [[https://aws.amazon.com/cdk/][CDK]] permet de décrire les ressources avec Python, Java, TypeScript...
+- Développé par AWS
+- Originellement disponible que pour AWS
+- Peut maintenant s'appuyer sur les providers de Terraform
+
+#+begin_src  python
+  function = _lambda.Function(
+      self,
+      "lambda_function",
+      runtime=_lambda.Runtime.PYTHON_3_8,
+      handler="index.handler",
+      code=_lambda.Code.from_asset("lambda"),
+      layers=[layer]
+  )
+#+end_src
+
+** COMMENT Crossplane
+
+- outillage déployé sur un cluster
+- décrire l'infra en CRD Kubernetes
+- l'infra est surveillée et corrigée en permanence
+ 
+* Retour d'expérience
+
+** Terraform
+
+- permet de décliner assez facilement des déploiements =dev=, =pre-prod=, =prod=...
+- pas trop de problèmes de compatiblité sur les upgrades
+- =tfstate= un peu pénible à gérer et partager
+
+** Autres
+
+- CloudFormation
+  - trop limité par YAML
+  - extensions sur YAML difficiles à suivre
+  
+** COMMENT Ansible
+
+- ansible:
+  - ok pour le bare metal (pas d'API sur la machine)
+  - pas forcéement reproductible (dépend des playbook)
+  - pas forcément idempotent
+
+* Conclusion
+
+- CloudFormation et CDK assez peu utilisés
+- Terraform est devenu un standard de facto
+- Beaucoup de postes ou de missions demandent des compétences
+  Terraform
+
