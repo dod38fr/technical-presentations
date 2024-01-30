@@ -1,0 +1,190 @@
+#+TITLE: Swagger / OpenAPI
+#+OPTIONS: ^:{}
+
+* What is Swagger / OpenAPI
+
+
+** Wikipedia
+
+From [[https://en.wikipedia.org/wiki/OpenAPI_Specification][OpenAPI Specification - Wikipedia]]
+#+begin_quote
+The OpenAPI Specification, previously known as the Swagger
+Specification, is a specification for a machine-readable interface
+definition language for describing, producing, consuming and
+visualizing web services.[1]
+#+end_quote
+
+** Ways to use this specification
+
+- Write code with swagger annotations:
+  - generate swagger descrition
+  - generate web site with docs ([[https://www.arduino.cc/reference/en/iot/api/][arduino example]])
+- Write swagger spec:
+  - generate code from swagger description
+  - generate doc and web site
+
+** Code generation tools
+
+- [[https://github.com/OpenAPITools/openapi-generator][openapi-generator]]:
+  - written in Java
+  - handle lots of languages and frameworks
+  - support openapi/swaggger 2.0 and 3.0
+- [[https://github.com/go-swagger/go-swagger][go-swagger]]:
+  - written in Go
+  - supports *only* swagger 2.0
+
+* Swagger content
+
+2 main parts in YAML files:
+
+- data structures declaration (types):
+  - types can refer other types
+  - yaml anchor and aliases can also be used to reduce duplication
+- api description (using the types defined above):
+  - path (e.g. =/foo/{bar}=)
+  - verbs (=GET=, =POST= ...)
+  - parameters (in URL or in body)
+  - responses (=200 OK= or errors)
+
+* Basic example
+:PROPERTIES:
+:header_args: :session basic
+:END:
+
+** Prepare demo                                                    :noexport:
+
+Create tmux session:
+
+#+NAME: test_dir
+#+begin_example
+/home/domi/aws-work/prez
+#+end_example
+
+#+BEGIN_SRC tmux :session basic :var dir=test_dir :exports code :eval noexport
+  cd $dir
+  rm go.*
+  go mod init example.com/swagger
+  cd swagger
+  export GOPATH=$PWD
+  rm -rf src
+  rm swagger.yml
+  go mod tidy
+  echo $PWD
+#+END_SRC
+
+** Generate skeleton
+
+#+BEGIN_SRC tmux :session basic :exports code :eval no-export
+  swagger init spec \
+    --title "A web service" \
+    --description "My web service" \
+    --version 0.0.1 \
+    --scheme http \
+    --consumes application/json \
+    --produces application/json
+#+END_SRC
+
+#+BEGIN_SRC tmux :session basic :exports code
+  tree
+#+END_SRC
+
+** View generated skeleton
+
+#+BEGIN_SRC tmux :session basic :exports code
+  cat swagger.yml
+#+END_SRC
+
+Cannot do much with it
+
+** Add a minimal spec
+
+This minimal spec specifies one file with one path:
+
+#+begin_src tmux :session basic :exports code
+  cat basic.yml
+#+end_src
+
+** Validation
+
+#+BEGIN_SRC tmux :session basic :exports code
+  swagger validate basic.yml
+#+END_SRC
+
+** Generate the server
+
+#+BEGIN_SRC tmux :session basic :exports code
+  mkdir src
+  swagger generate server -A my_ws -f basic.yml -t src
+#+END_SRC
+
+Results, all files under src are generated
+#+begin_src tmux :session basic :exports code
+  tree
+#+end_src
+
+** Generated model files
+
+#+begin_src tmux :session basic :exports code
+  tree src/models
+#+end_src
+
+The generated file matches the =environment= type defined in the
+swagger file.
+
+#+begin_src tmux :session basic :exports code
+  less src/models/environment.go
+#+end_src
+
+** Generated restapi files
+
+#+begin_src tmux :session basic :exports code
+  tree src/restapi
+#+end_src
+
+Contains:
+
+*** embedded_spec.go
+
+More or less the swagger spec in a data structure:
+
+#+begin_src tmux :session basic :exports code
+  less src/restapi/embedded_spec.go
+#+end_src
+
+*** server.go
+
+The main server code.
+
+*** operations dir
+
+Contains business logic to handle http requests:
+
+#+begin_src tmux :session basic :exports code
+  tree src/restapi/operations
+#+end_src
+
+*** configure_my_ws.go
+
+The only generated file that can (and must) be edited:
+
+#+begin_src tmux :session basic :exports code
+  less src/restapi/configure_my_ws.go
+#+end_src
+
+** Customize the server
+
+Edit =configureAPI= function in =src/restapi/configure_my_ws.go=:
+
+To ease maintenance:
+- do not include business logic here
+- use a very thin layer to immediately call other classes (with their
+  business logic, i.e the controller classes )
+
+* Debugging Go
+
+Several possibilities
+
+- good old =fmt.Sprintf=
+- add logs when needed (also for traceability)
+- [[https://github.com/go-delve/delve/tree/master][GitHub - go-delve/delve]] : not tried much. Probably as complicated as
+  gdb.
