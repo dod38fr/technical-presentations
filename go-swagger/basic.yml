@@ -1,0 +1,30 @@
+---
+consumes:
+  - application/json
+info:
+  description: My web service
+  title: A web service
+  version: 0.0.1
+produces:
+  - application/json
+schemes:
+  - http
+swagger: "2.0"
+basePath: /app/v1
+definitions:
+  environment:
+    description: Deployment environment.
+    type: object
+    properties:
+      env:
+        type: string
+        enum: [dev, prd]
+paths:
+  /env:
+    get:
+      summary: get env
+      responses:
+        200:
+          description: environment
+          schema:
+            $ref: "#/definitions/environment"
