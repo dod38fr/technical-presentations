@@ -1,5 +1,14 @@
 #+TITLE: Swagger / OpenAPI
+#+author: Dominique Dumont
+#+email: dominique@code-straight.fr
 #+OPTIONS: ^:{}
+
+* Who am I?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer since 2011
+- Open-Source contributor since 1996
+- Freelance devops since 2020
 
 * What is Swagger / OpenAPI
 
