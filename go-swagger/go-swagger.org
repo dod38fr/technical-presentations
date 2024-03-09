@@ -112,7 +112,7 @@ echo -n $PWD
 
 Cannot do much with it
 
-** Add a minimal spec
+** Minimal specification for a service
 
 This minimal spec specifies one file with one path:
 
