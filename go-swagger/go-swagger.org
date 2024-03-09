@@ -202,5 +202,4 @@ Several possibilities
 
 - good old =fmt.Sprintf=
 - add logs when needed (also for traceability)
-- [[https://github.com/go-delve/delve/tree/master][GitHub - go-delve/delve]] : not tried much. Probably as complicated as
-  gdb.
+- [[https://github.com/go-delve/delve/tree/master][GitHub - go-delve/delve]] : similar to gdb.
