@@ -66,11 +66,13 @@ Create tmux session:
 
 #+NAME: test_dir
 #+begin_example
-/home/domi/aws-work/prez
+/tmp/prez
 #+end_example
 
 #+BEGIN_SRC tmux :session basic :var dir=test_dir :exports code :eval noexport
+  mkdir -p $dir
   cd $dir
+  mkdir -p swagger
   rm go.*
   go mod init example.com/swagger
   cd swagger
