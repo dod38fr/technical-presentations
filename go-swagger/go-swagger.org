@@ -65,20 +65,25 @@ visualizing web services.[1]
 Create tmux session:
 
 #+NAME: test_dir
-#+begin_example
-/tmp/prez
-#+end_example
+#+begin_src shell
+echo -n /tmp/prez
+#+end_src
 
-#+BEGIN_SRC tmux :session basic :var dir=test_dir :exports code :eval noexport
-  mkdir -p $dir
+#+NAME: repo_dir
+#+begin_src shell
+echo -n $PWD
+#+end_src
+
+#+BEGIN_SRC tmux :session basic :var dir=test_dir repo_dir=repo_dir :exports code :eval noexport
+  mkdir -p $dir/swagger
+  cp $repo_dir/basic.yml $dir/swagger
   cd $dir
-  mkdir -p swagger
   rm go.*
   go mod init example.com/swagger
   cd swagger
   export GOPATH=$PWD
   rm -rf src
-  rm swagger.yml
+  rm -f swagger.yml
   go mod tidy
   echo $PWD
 #+END_SRC
