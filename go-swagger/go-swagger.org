@@ -78,7 +78,7 @@ echo -n $PWD
   mkdir -p $dir/swagger
   cp $repo_dir/basic.yml $dir/swagger
   cd $dir
-  rm go.*
+  rm -f go.*
   go mod init example.com/swagger
   cd swagger
   export GOPATH=$PWD
@@ -170,6 +170,8 @@ More or less the swagger spec in a data structure:
 *** server.go
 
 The main server code.
+
+No need to go into that.
 
 *** operations dir
 
