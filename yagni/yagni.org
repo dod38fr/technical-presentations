@@ -1,0 +1,52 @@
+#+TITLE: Clean software architecture: YAGNI
+#+STARTUP: inlineimages
+* YAGNI
+
+** Definition
+
+- Means "You Aren't Gonna Need It"
+- one of the best practices to get a clean architecture
+
+** Why ?
+
+- when working on a feature, people tend to anticipate future needs
+  (aka /presumptive feature/)
+- which may makes sense since they have all the current design in mind
+
+
+** Problems
+*** Cost of build
+- there future needs are seldom well defined
+- may try to do more future planning, which is time consuming and
+  seldom right
+- hence the feature may get more expensive compared to waiting for the
+  right inputs
+*** Cost of delay
+- while the presumptive feature is implemented, the current feature is delayed
+- which may incur a cost (time to market)
+*** Cost of carry
+- while the presumptive feature is not needed, it adds on the
+  complexity of the software
+- while next features are harder to implement and debug
+- which adds to their delay
+- which increases the cost of delay
+*** Cost of repair
+- odds of building the wrong feature is > 2/3
+- it then needs to be repaired
+- which add more delays
+*** All in all
+
+[[./costs.png]]
+** However
+- Yagni only applies to capabilities built into the software to
+  support a presumptive feature,
+- it does not apply to effort to make the software easier to modify.
+- because the goal of refactoring is to make the code easier to modify
+- Yagni does /not/ apply to small feature that does not add to the complexity of code
+* More info
+
+- [[https://martinfowler.com/bliki/Yagni.html][Yagni]] by Martin Fowler
+
+# Local Variables:
+# org-tree-slide-slide-in-effect: nil
+# End:
