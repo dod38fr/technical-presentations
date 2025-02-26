@@ -1,0 +1,263 @@
+#+TITLE: Retour d'expérience sur Gorm
+#+author: Dominique Dumont
+#+email: dominique@code-straight.fr
+#+OPTIONS: ^:{}
+
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer depuis 2011
+- Contributeur en Open-Source depuis 1996
+- Freelance devops depuis 2020
+
+* Gorm ?
+
+- ORM en Go
+- [[https://gorm.io/][GORM - The fantastic ORM library for Golang, aims to be developer friendly.]] 😮
+- ORM: "Object Relational Mapper"
+- la promesse:
+  - pouvoir créer une schema à partir du code Go
+  - transmettre les données de structures Go dans les tables SQL
+  - et inversement
+  - gérer aussi les structures imbriquées
+
+* Création de modèle
+
+- Gorm est capable de créer la schema à partir des structures Go
+- Gorm est aussi capable d'exploiter une schema existante
+
+#+begin_src go
+type User struct {
+  ID           uint           // Standard field for the primary key
+  Name         string         // A regular string field
+  Email        *string        // A pointer to a string, allowing for null values
+  Age          uint8          // An unsigned 8-bit integer
+  Birthday     *time.Time     // A pointer to time.Time, can be null
+  MemberNumber sql.NullString // Uses sql.NullString to handle nullable strings
+}
+#+end_src
+
+🩹 types =sql.NullString= pour des notions SQL (null type)
+
+** Contraintes sur les champs
+
+Le contraintes typiques de SQL sont faites avec des tags:
+
+#+begin_src go
+type User struct {
+  ID           uint  
+  Name         string  `gorm:"index"`         
+  Email        *string `gorm:"unique"`
+  Age          uint8
+  Birthday     *time.Time
+  MemberNumber sql.NullString
+}
+#+end_src
+
+👁️‍🗨️ Connaissances en DB requises pour les tags
+
+* Envoi de données dans les tables
+** Avec ORM
+
+#+begin_src go
+  user := User{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
+
+  // pass pointer of data to Create
+  result := db.Create(&user)
+
+  result.Error        // returns error
+  result.RowsAffected // returns inserted records count
+#+end_src
+
+Bien pratique sur les structures longues.
+
+** Sans ORM
+
+En C++:
+
+#+begin_src c++
+   SQLite::Statement author_q(pan_db, R"SQL(
+     insert into author (name, address) values (?,?)
+   )SQL");
+   author_q.bind(1,name);
+   author_q.bind(1,address);
+   author_q.exec();
+#+end_src
+
+Verbeux mais explicite.
+
+* Lire les données
+
+** Avec ORM
+#+begin_src go
+  type User struct {
+  	Name string
+  	Age int
+  	Birthday Time
+  }
+  var users []User
+
+  db.Where("name LIKE ?", "%jin%").Find(&users)
+  // SELECT * FROM users WHERE name LIKE '%jin%';
+#+end_src
+
+👁️‍🗨️ Connaissances en DB requises pour le =LIKE=
+
+** Avec ORM
+
+Pas forcément intuitif:
+
+#+begin_src go
+    type User struct {
+    	Name string
+    	Age int
+    	Birthday Time
+    }
+    var users []User
+
+  db.Find(&users, []int{1,2,3})
+  // SELECT * FROM users WHERE id IN (1,2,3);
+#+end_src
+
+** Sans ORM
+
+#+begin_src c++
+  SQLite::Statement is_read_q(pan_db, R"SQL(
+    select is_read from article where message_id = ?
+  )SQL");
+
+  is_read_q.bind(1, message_id);
+  
+  while (is_read_q.executeStep()) {
+    return is_read_q.getColumn(0).getInt() == 1;
+  }
+#+end_src
+
+* Relations / Associations
+
+** avec ORM - déclaration
+#+begin_src go
+// User has and belongs to many languages, `user_languages` is the join table
+type User struct {
+  gorm.Model
+  Languages []Language `gorm:"many2many:user_languages;"`
+}
+
+type Language struct {
+  gorm.Model
+  Name string
+}
+#+end_src
+
+relation =many2many= déduite à partir dy  type =Language=
+
+👁️‍🗨️ notions SQL: =many2many=, =join table=
+
+** avec ORM - lecture
+
+#+begin_src go
+  // Retrieve user list with eager loading languages
+  var users []User
+  err := db.Model(&User{}).Preload("Languages").
+  	Find(&users).Error
+#+end_src
+
+- 🎃 méthode =Preload= pas intuitive
+
+** sans ORM - lecture
+
+#+begin_src c++
+  SQLite::Statement read_group_q(pan_db, R"SQL(
+    select g.name from `group` as g
+    join article_group as ag on ag.group_id == g.id
+    join article as a on ag.article_id == a.id
+    where message_id = ?
+  )SQL");
+  read_group_q.bind(1, article->message_id);
+
+  while (read_group_q.executeStep())
+  {
+      Quark grp (Quark(read_group_q.getColumn(0).getText()));
+      group_to_changed_mids[grp].insert(article->message_id);
+  }
+#+end_src
+
+- Verbeux,  mais explicite.
+- on peut valider la requête avec =sqlitebrowser= (ou =DBeaver=)
+
+* Contourner Gorm
+
+- pour les requêtes les plus complexes:
+  - création d'une structure ah-hoc pour récupérer les résultats
+  - écriture d'une requête SQL 
+
+#+begin_src go
+  type Result struct {
+    ID   int
+    Name string
+    Age  int
+  }
+
+  var result Result
+  db.Raw("SELECT id, name, age FROM users WHERE name = ?",
+  	"jinzhu").Scan(&result)
+#+end_src
+
+
+* Effets de bord
+
+** Couplage
+
+En voulant faire [[https://talks.freelancerepublik.com/principe-dry-dont-repeat-yourself/][DRY]], il est tentant d'avoir
+
+#+begin_src go
+type User struct {
+  ID           uint  
+  Name         string  `gorm:"index",json:"name"`         
+  Email        *string `gorm:"unique",json"email"`
+  Age          uint8
+  Birthday     *time.Time
+}
+#+end_src
+
+- la même structure est utilisée pour l'API, le controlleur et l'adapteur de la DB
+- une modification d'un côté casse tout (couplage fort)
+
+** Copie de stucture
+
+- Pour éviter les couplages: Avoir des structures dédiées pour l'API,
+  les controlleurs (=CtrlStruct=) et la DB (=DbStruct=)
+- Avec ORM:
+  - copier les données de =CtrlStruct= vers =DbStruct=
+  - appeller l'ORM (qui copie les données de =DbStruct= pour les envoyer à la DB)
+- Sans ORM:
+  - copier les données de =DbStruct= pour envoi à la DB
+
+** Déboguage
+
+En cas de problème
+- Besoin de lire les logs de Gorm qui montrent les requêtes SQL
+- avec des tables de liaisons créées par Gorm
+- Besoin d'expertise SQL déboguer
+
+* Conclusions 1/2
+
+- ORM possible si:
+  - beaucoup de colonnes dans les tables
+  - la logique utilise toutes les colonnes
+  - prototype
+- ORM déconseillé:
+  - besoin de perf sur des requêtes complexes
+  - lecture d'une colonne à la fois
+
+* Conclusions 2/2
+
+- Si ORM, ne pas hésiter à contourner l'ORM et écrire vos requêtes SQL
+- Pour votre carrière:
+  - Les connaissances SQL s'appliquent à tous les langages (PHP, Python)
+  - Les connaissances Gorm ne s'appliquent qu'à Go.
+
+ 
+* 
+[[file:that_s_all_folks__by_surrimugge-d6rfav1.png]]
+
