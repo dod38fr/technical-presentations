@@ -1,0 +1,1546 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+% \setbeameroption{show only notes}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language swedish
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Copyright 2017, Dominique Dumont <domi.dumont@free.fr>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+This file can be redistributed and/or modified under the terms of the GNU
+ Public License, version 2.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Kubernetes for beginners
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+k8s for beginners
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Dominique
+\begin_inset space ~
+\end_inset
+
+Dumont
+\end_layout
+
+\begin_layout Institute
+Debian Project
+\end_layout
+
+\begin_layout Date
+Nov 2017
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    %
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+
+\lang french
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Why Kubernetes ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+docker is nice, but containers tend to multiply
+\end_layout
+
+\begin_layout Itemize
+needs to manage / orchestrate them
+\end_layout
+
+\begin_layout Itemize
+need to handle network setup between all these images (micro services beget
+ mega network)
+\end_layout
+
+\begin_layout Itemize
+handle 
+\begin_inset Quotes sld
+\end_inset
+
+smooth
+\begin_inset Quotes srd
+\end_inset
+
+ updates
+\end_layout
+
+\begin_layout Standard
+Solutions: docker swarm, Kubernetes (other ?)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+New concepts and terminology
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+New concepts compared to docker:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+pod
+\end_layout
+
+\end_inset
+
+: a group of containers that provide a functionality
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+node
+\end_layout
+
+\end_inset
+
+: a worker machine (or VM).
+ old term: 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+minion
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+deployment
+\end_layout
+
+\end_inset
+
+: controls lifecycle of a group of pods (rolling upgrades)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+service
+\end_layout
+
+\end_inset
+
+: deployment frontend.
+ Configure load-balancer and external access
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Pod in more details 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+.5
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A pod is a group of containers:
+\end_layout
+
+\begin_layout Itemize
+share the same IP address.
+ Must set different listening ports on each container
+\end_layout
+
+\begin_layout Itemize
+declare external ports that are mapped to container ports
+\end_layout
+
+\begin_layout Itemize
+can mount shared volumes
+\end_layout
+
+\begin_layout Itemize
+can be configured with ConfigMaps and Secrets through environment variables
+ or files
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+.4
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pod.fig
+	width 90text%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Deployment
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+.4
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A deployment with its ReplicaSet is a group of pods (of the same kind):
+\end_layout
+
+\begin_layout Itemize
+ReplicaSet ensures failover
+\end_layout
+
+\begin_layout Itemize
+manage liveness and readiness probes
+\end_layout
+
+\begin_layout Itemize
+manage rolling upgrades
+\end_layout
+
+\begin_layout Column
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+.5
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename deployment.fig
+	lyxscale 60
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Services
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+A Service is the external front end of a Deployment:
+\end_layout
+
+\begin_layout Itemize
+manage load balancing between the pod instances of a Deployment
+\end_layout
+
+\begin_layout Itemize
+map port between external port (e.g.
+ 80) and container ports (e.g.
+ 8080)
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Graphics
+	filename service.fig
+	lyxscale 60
+	width 80col%
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Pod example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Inside a deployment:
+\end_layout
+
+\begin_layout LyX-Code
+    
+\size small
+spec:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      containers:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      - name: my-contained-server
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        image: my-contained-image:latest
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        imagePullPolicy: Always
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        livenessProbe:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+          httpGet: { path: /ping, scheme: HTTPS }
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+          initialDelaySeconds: 15
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+          periodSeconds: 10
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+          timeoutSeconds: 3
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        readinessProbe: # similar
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        volumeMounts:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        - name: shared-stuff
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+          mountPath: "/var/lib/shared"
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      - name: side-car
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        image: side-car:latest
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Deployment example 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size small
+apiVersion: extensions/v1beta1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+kind: Deployment
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+metadata:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+  name: super-duper-server
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+spec:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+  replicas: 1
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+  strategy:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+    type: RollingUpdate
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+    rollingUpdate: { maxUnavailable: 0, maxSurge: 2 }
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+  template:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+    metadata:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      name: super-mega-server
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      labels: # used by Service
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+        my-server: mega-server
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+    spec:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      containers:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+      [ pod specification ]
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Service example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+apiVersion: v1
+\end_layout
+
+\begin_layout LyX-Code
+kind: Service
+\end_layout
+
+\begin_layout LyX-Code
+metadata:
+\end_layout
+
+\begin_layout LyX-Code
+  labels:
+\end_layout
+
+\begin_layout LyX-Code
+    name: my-super-service
+\end_layout
+
+\begin_layout LyX-Code
+  name: super-service
+\end_layout
+
+\begin_layout LyX-Code
+spec:
+\end_layout
+
+\begin_layout LyX-Code
+  ports:
+\end_layout
+
+\begin_layout LyX-Code
+  - {port: 443, targetPort: 8090}
+\end_layout
+
+\begin_layout LyX-Code
+  type: LoadBalancer
+\end_layout
+
+\begin_layout LyX-Code
+  # load balancer target
+\end_layout
+
+\begin_layout LyX-Code
+  selector:
+\end_layout
+
+\begin_layout LyX-Code
+    
+\size small
+my-server: mega-server
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Config
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+namespace: isolated sandboxes within a cluster.
+ Great for tests
+\end_layout
+
+\begin_layout Itemize
+context: associate cluster and namespace
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Commands:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+$ kubectl config get-contexts
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+CURRENT   NAME            CLUSTER         AUTHINFO        NAMESPACE
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+          minikube        minikube        minikube                     
+        
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+*         dev-us-west-2   k-uw2.xxx.com   us-west-2-user   
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+          dod-dev-us-w2   k-uw2.xxx.com   us-west-2-user  dod-playground
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+$ kubectl config use-context dod-dev-us-w2
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+$ kubectl config set-context ...
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sending config
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Create Deployment or services:
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl apply -f .../file.yaml
+\end_layout
+
+\begin_layout Standard
+Update a deployment:
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl replace -f .../file.yaml
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Kubernetes console
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+If enabled by admin, cluster can be controled with a web interface
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+$ kubectl proxy
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+ Starting to serve on 127.0.0.1:8001
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename kube-console.jpg
+	lyxscale 50
+	width 70col%
+	height 9cm
+	keepAspectRatio
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Connecting to a container
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+In enabled by sys admin, you can connect to a container in the cluster:
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl exec --namespace francois-sandbox 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  fco-mode1-n9r-812209105-9wfcs -c omg date
+\end_layout
+
+\begin_layout LyX-Code
+Thu Oct 26 18:01:58 UTC 2017
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl exec --namespace francois-sandbox 
+\end_layout
+
+\begin_layout LyX-Code
+  fco-mode1-n9r-812209105-9wfcs -c omg -ti sh / #  
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Getting logs
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Getting log may be the only way to get debug information.
+ To get log from a container:
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl logs --namespace francois-sandbox 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  fco-mode1-n9r-812209105-9wfcs omg --since 10s
+\end_layout
+
+\begin_layout LyX-Code
+$ kubectl logs --namespace francois-sandbox 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  fco-mode1-n9r-812209105-9wfcs omg -f
+\end_layout
+
+\begin_layout AlertBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Logs from many pods
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout AlertBlock
+Problems can occur in any deployed pod.
+ You need to setup a log aggregator (kibana...)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Auto-completion
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Typings all these options and arguments is tedious and error prone.
+ Add this in 
+\family typewriter
+your ~/.bashrc
+\end_layout
+
+\begin_layout LyX-Code
+KFILE=/tmp/kube-completion
+\end_layout
+
+\begin_layout LyX-Code
+if [ -f /usr/local/bin/kubectl ]; then
+\end_layout
+
+\begin_layout LyX-Code
+    /usr/local/bin/kubectl completion bash > $KFILE
+\end_layout
+
+\begin_layout LyX-Code
+    .
+ $KFILE
+\end_layout
+
+\begin_layout LyX-Code
+    rm $KFILE
+\end_layout
+
+\begin_layout LyX-Code
+fi
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Other tools
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+You can have your prompt display the current environment:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename k8s-prompt.jpg
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+For a command prompt that shows your context, add this in 
+\family typewriter
+your ~/.bashrc
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+NORMAL="
+\backslash
+[
+\backslash
+033[00m
+\backslash
+]"
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+YELLOW="
+\backslash
+[
+\backslash
+e[1;33m
+\backslash
+]"
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+__kube_prompt() {
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+    # Get current context
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+    CONTEXT=$(perl -nE 'print if s/current-context: //;' 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+              ~/.kube/config)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+    if [[ -n "$CONTEXT" ]]
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+    then
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+        echo "$YELLOW(k8s: ${CONTEXT})$NORMAL
+\backslash
+n"
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+    fi
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+PS1=$(__kube_prompt)'${USER}@${HOSTNAME}:${PWD/$HOME/
+\backslash
+
+\backslash
+~}
+\backslash
+
+\backslash
+$ '
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+MiniKube
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "MiniKube"
+target "https://kubernetes.io/docs/getting-started-guides/minikube/"
+
+\end_inset
+
+ lets you play with kubernetes your laptop.
+\end_layout
+
+\begin_layout Itemize
+Can use kubernetes console to control your minikube
+\end_layout
+
+\begin_layout Itemize
+Note: docker commands deal with a docker daemon running in minikube, not
+ with your 
+\begin_inset Quotes sld
+\end_inset
+
+regular
+\begin_inset Quotes srd
+\end_inset
+
+ docker daemon
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\end_body
+\end_document

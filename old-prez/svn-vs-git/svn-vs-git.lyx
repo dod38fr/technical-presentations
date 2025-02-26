@@ -1,0 +1,656 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme[numbering=none]{metropolis}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+% \setbeameroption{show only notes}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style swedish
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Copyright 2018, Dominique Dumont <domi.dumont@free.fr>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+This file can be redistributed and/or modified under the terms of the GNU
+ Public License, version 2.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+svn to Git: to split or not to split a repo ?
+\end_layout
+
+\begin_layout Author
+Dominique
+\begin_inset space ~
+\end_inset
+
+Dumont
+\end_layout
+
+\begin_layout Institute
+Debian Project
+\end_layout
+
+\begin_layout Date
+Oct 2018
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    %
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+
+\lang french
+If 
+\lang american
+you
+\lang french
+ wish to uncover everything in a step-wise fashion, uncomment the following
+ command:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Svn to Git: Debian-perl example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Old situation:
+\end_layout
+
+\begin_layout Itemize
+one repo for ~ 3000 source package of Perl modules
+\end_layout
+
+\begin_layout Itemize
+all these modules are independent and have a different life cycle
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Migration:
+\end_layout
+
+\begin_layout Itemize
+did not even consider mono repo
+\end_layout
+
+\begin_layout Itemize
+need to synchronize migration with devs around the world
+\end_layout
+
+\begin_layout Itemize
+had to update 
+\begin_inset CommandInset href
+LatexCommand href
+name "team monitoring tool"
+target "https://pet.debian.net/pkg-perl/pet.cgi"
+literal "false"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Debian-perl team members had to use new build tools
+\end_layout
+
+\begin_layout Itemize
+no impact on Debian builder (insulated by package source) or Bug tracker
+ (refers to package source and not on repo)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Svn to Git: config-model example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Old situation:
+\end_layout
+
+\begin_layout Itemize
+one repo for 3 more or less dependent components
+\end_layout
+
+\begin_layout Itemize
+mono repo with SVN was more convenient (and traditional)
+\end_layout
+
+\begin_layout Itemize
+one core component is a dependency of all other components.
+ No dependency cycles though
+\end_layout
+
+\begin_layout Itemize
+integration is managed by Perl package manager (cpan) or downstream package
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Migration:
+\end_layout
+
+\begin_layout Itemize
+First done on mono repo (easier migration)
+\end_layout
+
+\begin_layout Itemize
+pb: tags apply to all components.
+ Need convention on tags (e.g.
+ 
+\begin_inset Quotes sld
+\end_inset
+
+tkui_v0.124
+\begin_inset Quotes srd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+Turns out components had different life cycles and loose dependencies
+\end_layout
+
+\begin_layout Itemize
+ended up splitting the mono git repo into multiple git repo (kept history
+ with git filter-branch)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Svn to Git: pros and cons of mono repo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+☺ one repository to manage (does it scale ?)
+\end_layout
+
+\begin_layout Description
+☺ good when components are strongly coupled (which may hint at design problems)
+\end_layout
+
+\begin_layout Description
+☹ git clone downloads the whole history (can be quite big for mono repo)
+\end_layout
+
+\begin_layout Description
+☹ history analysis is more difficult
+\end_layout
+
+\begin_layout Description
+☹ need to deal with unrelated commits when rebasing
+\end_layout
+
+\begin_layout Description
+☹ git tag: only way to track released versions.
+ No way to tag a part of a repo like in SVN.
+ Often worked around by applying prefix to tags.
+\end_layout
+
+\begin_layout Description
+☹ Cannot practically drop an obsolete project.
+ Dead projects stay in repo history.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Svn to Git: pros and cons of multi repo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+☺ easier to manage with several teams
+\end_layout
+
+\begin_layout Description
+☺ better adapted to manage components with different life cycles
+\end_layout
+
+\begin_layout Description
+☹ Component integration is done at a later stage: components must be built
+ and distributed (many choices: distro packages, npm, jar, images) through
+ a repository (debian, joyent, nexus, docker registry, CPAN...)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Git: hybrid mono/multi repo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Some projects (docker, moarvm, rakudo-star) adopt a hybrid solution: several
+ repos are gathered together:
+\end_layout
+
+\begin_layout Itemize
+git submodule
+\end_layout
+
+\begin_layout Itemize
+git subtree
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "git subrepo"
+target "https://github.com/ingydotnet/git-subrepo"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Pros and Cons
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+☺ no need to create or distribute build artifacts
+\end_layout
+
+\begin_layout Description
+☹ can be confusing when working in the main repo (what happen when git pushing
+ from a dependency ? branches vs subrepo ?)
+\end_layout
+
+\begin_layout Description
+☹ outside of the repo, no easy way to track the version of the imported
+ dependency (e.g.
+ match CVE with version of a dependency)
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Migration check-list
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Identify components of SVN repo
+\end_layout
+
+\begin_layout Itemize
+check dependencies between components ➔ new repo layout, best migration
+ order
+\end_layout
+
+\begin_layout Itemize
+check impact on tools (CI/CD bug tracker, doc)
+\end_layout
+
+\begin_layout Itemize
+identify component with 
+\begin_inset Quotes sld
+\end_inset
+
+earlier adopter
+\begin_inset Quotes srd
+\end_inset
+
+ mindset team (may conflict with best migration order)
+\end_layout
+
+\begin_layout Itemize
+migrate
+\end_layout
+
+\begin_layout Itemize
+update doc and tools
+\end_layout
+
+\begin_layout Itemize
+check impact
+\end_layout
+
+\begin_layout Itemize
+repeat for other components
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\end_body
+\end_document

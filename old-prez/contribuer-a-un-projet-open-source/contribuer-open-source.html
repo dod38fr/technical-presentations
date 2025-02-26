@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Comment contribuer à un projet Open-Source</title>
+<meta name="author" content="(Dominique Dumont)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/css/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = './reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" type="text/css" href="pres.css" />
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Comment contribuer à un projet Open-Source</h1><h2 class="author">Dominique Dumont</h2>
+</section>
+
+<section>
+<section id="slide-org4281303">
+<h2 id="org4281303">Pourquoi contribuer ?</h2>
+<div class="outline-text-2" id="text-org4281303">
+</div>
+</section>
+<section id="slide-orgc18826a">
+<h3 id="orgc18826a">Pour vous</h3>
+<ul>
+<li>étendre votre réseau</li>
+<li>monter en compétences (communication et technique)</li>
+<li>adapter un logiciel à vos besoins ("scratch your own itch")</li>
+
+</ul>
+
+</section>
+<section id="slide-org9831bd8">
+<h3 id="org9831bd8">Pour le projet</h3>
+<ul>
+<li>renvoyer l'ascenseur</li>
+<li>le dev se sentira moins seul</li>
+<li>améliorer la pérennité du projet</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org11d7857">
+<h2 id="org11d7857">Quel projet ?</h2>
+<div class="outline-text-2" id="text-org11d7857">
+</div>
+</section>
+<section id="slide-orgcbe2b0a">
+<h3 id="orgcbe2b0a">un projet qui vous motive</h3>
+<ul>
+<li>trouver un projet qui vous concerne, que vous utilisez</li>
+<li>avec un langage qui vous convient.</li>
+
+</ul>
+
+</section>
+<section id="slide-org3ab0f03">
+<h3 id="org3ab0f03">selon la santé du projet</h3>
+<p>
+Regarder la santé du projet:
+</p>
+<ul>
+<li>commits récents</li>
+<li>PR ou bugs en attente</li>
+<li>état de la documentation</li>
+<li>qualité des échanges sur les canaux de communication</li>
+
+</ul>
+
+<p>
+Mais un projet moribond peut aussi être adopté pour le faire revivre
+</p>
+
+</section>
+<section id="slide-org4442595">
+<h3 id="org4442595">selon l'ancienneté (ou pas)</h3>
+<p>
+Nouveau projet (kubernetes, node modules) où beaucoup est à faire.
+</p>
+
+<p>
+Ne pas négliger les projets anciens ( infrastructure, openssl, libc,
+kde, gnome, emacs ) qui manquent souvent de moyens.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdc709d1">
+<h2 id="orgdc709d1">Du coté légal &#x2026;</h2>
+<p>
+Est-ce du boulot ou du loisir ?
+</p>
+
+</section>
+<section id="slide-org53bf2f4">
+<h3 id="org53bf2f4">Sur votre temps libre</h3>
+<ul>
+<li>acceptez vous la licence du projet ? (copyleft vs permissive&#x2026;)</li>
+<li>le projet demande t'il un transfert de copyright ?</li>
+<li>attention aux problème de propriété intellectuelle entre votre
+boulot et le projet</li>
+
+</ul>
+
+</section>
+<section id="slide-org6654f86">
+<h3 id="org6654f86">Sur votre temps de travail</h3>
+<ul>
+<li>la licence est elle compatible avec la politique de votre entreprise
+(GPL, GPLv3 et brevets logiciels &#x2026;)</li>
+<li>il faut l'accord de votre employeur</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3165dd7">
+<h2 id="org3165dd7">Comment contribuer quand on n'est pas technique ?</h2>
+<div class="outline-text-2" id="text-org3165dd7">
+</div>
+</section>
+<section id="slide-org8f8beea">
+<h3 id="org8f8beea">D'abord observer</h3>
+<ul>
+<li>chercher la page "Contributing" du projet</li>
+<li>s'inscrire au listes de courrier (ou forum web)</li>
+<li>lire les docs</li>
+
+</ul>
+
+</section>
+<section id="slide-orga2202a1">
+<h3 id="orga2202a1">Communiquer</h3>
+<ul>
+<li>poser des questions</li>
+<li>faire des rapports de bug (fonctionnel ou documentation)</li>
+<li>suggérer des améliorations fonctionnelles</li>
+
+</ul>
+
+</section>
+<section id="slide-orged31f4f">
+<h3 id="orged31f4f">Contribuer</h3>
+<ul>
+<li>proposer des traductions (doc ou messages utilisateurs)</li>
+<li>proposer des améliorations de la doc (man page ou site web)</li>
+<li>ou des icônes pour les graphistes</li>
+
+</ul>
+
+<p>
+Important: Proposez avant de passer du temps.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd3d3bed">
+<h2 id="orgd3d3bed">Comment contribuer quand est technique ?</h2>
+<ul>
+<li>trier et raffiner les bugs existants</li>
+<li>ajouter des tests aux rapport de bug (TDD)</li>
+<li>proposer des patches (en suivant les pratiques du projet)</li>
+<li>ou des pull-request</li>
+<li>maintenir des paquet (deb, rpm) pour une distro</li>
+<li>&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7131a92">
+<h2 id="org7131a92">Plus d'information</h2>
+<ul>
+<li><a href="https://hacktoberfest.digitalocean.com/details">Getting started with Hacktoberfest</a></li>
+<li><a href="https://opensource.guide/how-to-contribute/">How to Contribute to Open Source</a></li>
+<li><a href="https://www.debian.org/intro/help">How can you help Debian ?</a></li>
+<li><a href="https://community.kde.org/Get_Involved">Get involved with KDE</a></li>
+<li><a href="https://www.gnu.org/help/help.html">Helping the GNU Project and the Free Software Movement</a></li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: './reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: './reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

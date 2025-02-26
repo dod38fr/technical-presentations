@@ -1,0 +1,27 @@
+.pres-image {
+    /* float: right; */
+    /* vertical-align: top; */
+    width: 150px;
+}
+
+.figure {
+    margin: 15px;
+}
+
+.pres-plot {
+    width: 400px;
+}
+pre.example {
+    font-size: 0.35em;
+}
+
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+
+.list-none {
+    list-style-type: none !important
+}

@@ -1,0 +1,17 @@
+.pres-image {
+    /* float: right; */
+    /* vertical-align: top; */
+    width: 150px;
+}
+.pres-plot {
+    width: 400px;
+}
+
+pre.example {
+    font-size: 0.35em;
+}
+
+p {
+    text-align: left;
+}
+

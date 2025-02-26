@@ -1,0 +1,227 @@
+#+TITLE: Démarrer avec Helm
+#+AUTHOR: Dominique Dumont
+#+EMAIL: dominique@code-straight.fr
+#+OPTIONS: timestamp:nil creator:nil author:nil num:nil toc:nil
+
+# doc: https://github.com/yjwen/org-reveal/ and https://revealjs.com/
+
+#+REVEAL_EXTRA_CSS: ./pres.css
+
+#+REVEAL_THEME: solarized
+
+# Available transitions are: default|cube|page|concave|zoom|linear|fade|none.
+#+REVEAL_INIT_OPTIONS: transition: 'none', pdfSeparateFragments: false
+
+* Qui suis-je ?
+
+- [[https://code-straight.fr/][Dominique Dumont]]
+- Indépendant 🔗 https://code-straight.fr
+- Debian Developer
+- Twitter: @dod38fr
+- 📧 [[mailto:dominique@code-straight.fr][dominique@code-straight.fr]]
+
+#+begin_notes
+- démarrage freelance en même temps que COVID-19 ...
+#+end_notes
+
+* Kubernetes
+
+- pour le cloud
+- gère le cycle de vie des composants déployés
+- gère les connexions réseau
+- déployé en =cluster=
+
+#+attr_html: :class pres-image
+[[file:kubernetes.png]]
+
+* Helm pour installer des composants
+
+- Helm est un gestionnaire de paquets
+- un peu comme =apt=, =yum=, =brew= ou =chocolatey=
+- la cible est un cluster Kubernetes
+
+#+attr_html: :class pres-image
+[[file:helm.svg]]
+
+** les 3 concepts principaux
+
+- Chart :: Helm package. Comme un =rpm= ou un paquet =deb=
+- Repository :: un espace d'échange de Charts. Comme =CPAN= ou un =Debian repository=
+- Release :: Une instance de =Chart= installé dans un
+  cluster. =Release name= pour différencier les installations d'un même chart
+
+** Pré-requis
+
+- accès à un cluster Kubernetes
+- Helm [[https://helm.sh/docs/intro/install/][installé]]
+  
+** Chercher un paquet sur artifacthub.io
+
+Par exemple: [[https://artifacthub.io/packages/search?page=1&ts_query_web=vault][vault]] 🞋
+
+** Chercher un paquet en CLI
+
+#+BEGIN_SRC shell :results verbatim :exports both
+helm search hub vault
+#+END_SRC
+
+#+RESULTS:
+: URL                                               	CHART VERSION	APP VERSION	DESCRIPTION                                       
+: https://hub.helm.sh/charts/wener/vault            	0.9.0        	1.6.1      	Official HashiCorp Vault Chart                    
+: https://hub.helm.sh/charts/hashicorp/vault        	0.9.0        	1.6.1      	Official HashiCorp Vault Chart                    
+: https://hub.helm.sh/charts/banzaicloud-stable/v...	1.10.0       	1.10.0     	A Helm chart for Vault, a tool for managing sec...
+
+
+** Example: [[https://cert-manager.io/][cert-manager]]                                          :noexport:
+
+- renouvellement automatique des certificats TLS [[https://letsencrypt.org/][Let's Encrypt]]
+- [[https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm][l'installation]] demande ajout d'un repo spécifique
+
+#+BEGIN_SRC :eval no shell
+helm repo add jetstack https://charts.jetstack.io
+#+END_SRC
+
+** Exemple: [[https://artifacthub.io/packages/helm/dniel/www][www]]
+
+Serveur web minimaliste pour test.
+
+#+BEGIN_SRC :eval no 
+helm repo add dniel https://dniel.github.io/charts/
+helm install mon-www dniel/www --version 0.5.0
+#+END_SRC
+
+🧪
+
+#+begin_notes
+- lancer k9s dans un autre terminal
+- montrer le [[https://artifacthub.io/packages/helm/dniel/www][lien]] dans firefox
+- copier les instructions
+#+end_notes
+
+** Vérifier ce qu'on a
+
+#+BEGIN_SRC :eval no 
+helm list  
+#+END_SRC
+
+** Nettoyage
+
+#+BEGIN_SRC :eval no 
+helm uninstall mon-www
+#+END_SRC
+
+** Sécurité
+
+Comme pour tous les logiciels téléchargés depuis Internet, il faut:
+- vérifier l'origine
+- estimer la confiance qu'on a en l'auteur
+- examiner le contenu
+
+#+begin_notes
+ce que je n'ai pas fait car le clusteur est temporaire.
+#+end_notes
+  
+** Autres exemples de composants disponibles
+
+Quelques exemples de charts:
+- cert-manager :: manage Let's Encrypt certificates
+- discourse :: deploying Discourse to Kubernetes
+- KubeInvaders :: Gamified Chaos Engineering Tool for Kubernetes, an
+  alien is a pod
+
+* Helm pour gérer les fichiers YAML
+
+** Rappel
+
+# quels fichiers YAML ?
+
+Kubernetes demande beaucoup de fichiers YAML pour définir le cluster …
+- à décliner pour les clusters de test ou de prod
+- ou à modifier pour des clients (isolation)
+
+Helm est une des solutions possibles pour modifier les fichiers de
+déploiements.
+
+** Organisation:
+
+- =Chart.yaml= pour définir le chart (nom, version)
+- =values.yaml= pour définir les propriétés du chart
+- =templates/*.yml= pour déclarer les composants du cluster
+
+Les templates utilisent les [[https://golang.org/pkg/text/template/][template Go]]
+
+** Exemples
+
+Définir un nom de release («human-talk») à l'installation
+
+#+BEGIN_SRC shell :eval no
+helm install human-talk mon-chart
+#+END_SRC
+
+#+reveal_html: <div class="col fragment appear">
+
+Différencier le nom et les /labels/ du déploiement:
+
+#+BEGIN_SRC yaml :eval no 
+  metadata:
+    name: "{{ .Release.Name }}-server" # → human-talk-server
+    labels:
+      client: {{ .Release.Name }}      # → human-talk
+#+END_SRC
+
+#+reveal_html: </div>
+
+#+REVEAL: split:t
+
+Définir **une** fois le nombres de réplicas dans =values.yaml=:
+
+#+BEGIN_SRC yaml :eval no
+  replicaCount: 2
+#+END_SRC
+
+#+reveal_html: <div class="col fragment appear">
+
+Et les utiliser dans les déploiements
+
+#+BEGIN_SRC yaml :eval no
+spec:
+  replicas: {{ .Values.replicaCount }} # → 2
+#+END_SRC
+
+#+reveal_html: </div>
+
+#+REVEAL: split:t
+
+Définir les version des images dans =values.yaml=:
+
+#+BEGIN_SRC yaml :eval no
+  imageVersion:
+    ht_server: 1.5.0
+    another_server: 1.6.1
+#+END_SRC
+
+#+reveal_html: <div class="col fragment appear">
+
+Et les utiliser dans les pods:
+
+#+BEGIN_SRC yaml :eval no
+  containers:
+    - name: {{ .Release.Name }}-ht_server
+      # → ht_server:1.5.0
+      image: ht_server:{{ .Values.imageVersion.ht_server }}
+#+END_SRC
+
+#+reveal_html: </div>
+
+** Conclusion
+
+=helm= permet de gérer:
+- des déploiements multiples
+- les cycle de vie des composants installés
+
+Mais ajoute une couche de complexité (Go template).
+
+# N'hésiter pas à me contacter si vous avez besoin d'aide sur ces sujets.
+
+
+

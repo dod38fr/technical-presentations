@@ -1,0 +1,113 @@
+#+TITLE: Comment contribuer à un projet Open-Source
+#+AUTHOR: Dominique Dumont
+#+EMAIL: domi.dumont@free.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+
+# audience: all
+
+* Pourquoi contribuer ?
+
+** Pour vous
+
+- étendre votre réseau
+- monter en compétences (communication et technique)
+- adapter un logiciel à vos besoins ("scratch your own itch")
+
+** Pour le projet
+
+- renvoyer l'ascenseur
+- le dev se sentira moins seul
+- améliorer la pérennité du projet
+
+* Quel projet ?
+
+** un projet qui vous motive
+
+- trouver un projet qui vous concerne, que vous utilisez
+- avec un langage qui vous convient.
+
+** selon la santé du projet
+
+Regarder la santé du projet:
+- commits récents 
+- PR ou bugs en attente
+- état de la documentation
+- qualité des échanges sur les canaux de communication
+
+Mais un projet moribond peut aussi être adopté pour le faire revivre
+
+** selon la taille du projet                                      :noexport:
+
+- petit projet : plus facile de contribuer.
+- gros projet: plus difficile de rentrer. volume des mailing listes.
+
+** selon l'ancienneté (ou pas)
+
+Nouveau projet (kubernetes, node modules) où beaucoup est à faire.
+
+Ne pas négliger les projets anciens ( infrastructure, openssl, libc,
+kde, gnome, emacs ) qui manquent souvent de moyens.
+
+* Du coté légal ...
+
+Est-ce du boulot ou du loisir ?
+
+** Sur votre temps libre
+
+- acceptez vous la licence du projet ? (copyleft vs permissive...)
+- le projet demande t'il un transfert de copyright ?
+- attention aux problème de propriété intellectuelle entre votre
+  boulot et le projet
+
+** Sur votre temps de travail
+
+- la licence est elle compatible avec la politique de votre entreprise
+  (GPL, GPLv3 et brevets logiciels ...)
+- il faut l'accord de votre employeur
+
+* Comment contribuer quand on n'est pas technique ?
+
+** D'abord observer
+
+- chercher la page "Contributing" du projet
+- s'inscrire au listes de courrier (ou forum web)
+- lire les docs
+
+** Communiquer
+
+- poser des questions
+- faire des rapports de bug (fonctionnel ou documentation)
+- suggérer des améliorations fonctionnelles
+
+** Contribuer
+
+- proposer des traductions (doc ou messages utilisateurs)
+- proposer des améliorations de la doc (man page ou site web)
+- ou des icônes pour les graphistes
+
+Important: Proposez avant de passer du temps.
+
+* Comment contribuer quand est technique ?
+
+- trier et raffiner les bugs existants
+- ajouter des tests aux rapport de bug (TDD)
+- proposer des patches (en suivant les pratiques du projet)
+- ou des pull-request 
+- maintenir des paquet (deb, rpm) pour une distro
+- ...
+
+* Créer son propre projet                                          :noexport:
+
+- garder la motivation au long terme
+- pas facile d'attirer des participants
+- nécessite d'être clair sur la vision du projet
+
+* Plus d'information
+
+- [[https://hacktoberfest.digitalocean.com/details][Getting started with Hacktoberfest]]
+- [[https://opensource.guide/how-to-contribute/][How to Contribute to Open Source]]
+- [[https://www.debian.org/intro/help][How can you help Debian ?]]
+- [[https://community.kde.org/Get_Involved][Get involved with KDE]]
+- [[https://www.gnu.org/help/help.html][Helping the GNU Project and the Free Software Movement]]

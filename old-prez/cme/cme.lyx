@@ -1,0 +1,1486 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+% \setbeameroption{show only notes}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style swedish
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Copyright 2018, Dominique Dumont <domi.dumont@free.fr>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+This file can be redistributed and/or modified under the terms of the GNU
+ Public License, version 2.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+cme: Check or edit configuration files
+\end_layout
+
+\begin_layout Author
+Dominique
+\begin_inset space ~
+\end_inset
+
+Dumont
+\end_layout
+
+\begin_layout Institute
+Debian Project
+\end_layout
+
+\begin_layout Date
+May 2018
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    %
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+
+\lang french
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+What is cme ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+A tool to check the semantic content or modify configuration files content
+ with:
+\end_layout
+
+\begin_layout Itemize
+a CLI 
+\end_layout
+
+\begin_layout Itemize
+a shell
+\end_layout
+
+\begin_layout Itemize
+a curses interface
+\end_layout
+
+\begin_layout Itemize
+a GUI
+\end_layout
+
+\begin_layout Standard
+Purpose:
+\end_layout
+
+\begin_layout Itemize
+help beginners discover application possibilities (online help)
+\end_layout
+
+\begin_layout Itemize
+handle migration of old configuration files
+\end_layout
+
+\begin_layout Itemize
+help package upgrade by merging user conf with upstream changes (see lcdproc)
+\end_layout
+
+\begin_layout Itemize
+provide safe way to script configuration file modification
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Which configuration files ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size footnotesize
+$ cme list
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+system ( system configuration files.
+ Use sudo to run cme ):
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  approx
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  lcdproc
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  popcon
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  sshd
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  system-ssh
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  systemd
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+user ( user configuration files ):
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  ssh
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  systemd-user
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+application ( miscellaneous application configuration ):
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  dpkg
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  dpkg-control
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  dpkg-copyright
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  dpkg-patch
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  dpkg-patches
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  multistrap
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  systemd-service
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  systemd-socket
+\end_layout
+
+\begin_layout LyX-Code
+
+\size footnotesize
+  systemd-timer
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Validate semantic content 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+normal case
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+$ cme check lcdproc
+\end_layout
+
+\begin_layout LyX-Code
+cme: using LCDd model
+\end_layout
+
+\begin_layout LyX-Code
+loading data
+\end_layout
+
+\begin_layout LyX-Code
+checking data
+\end_layout
+
+\begin_layout LyX-Code
+check done
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Detect semantic error in value
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+file with a wrong value
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+ReportToSyslog = oui
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+error detection
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+$ cme check lcdproc
+\end_layout
+
+\begin_layout LyX-Code
+cme: using LCDd model
+\end_layout
+
+\begin_layout LyX-Code
+loading data
+\end_layout
+
+\begin_layout LyX-Code
+Configuration item 'server ReportToSyslog' 
+\end_layout
+
+\begin_layout LyX-Code
+has a wrong value:
+\end_layout
+
+\begin_layout LyX-Code
+        error: 'oui' is not boolean, 
+\end_layout
+
+\begin_layout LyX-Code
+        i.e.
+ not  'no' or 'yes'
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Error correction with CLI 1/2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+First try with cme modify:
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+$ sudo cme modify lcdproc 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  'server ReportToSyslog=yes'
+\end_layout
+
+\begin_layout LyX-Code
+cme: using LCDd model
+\end_layout
+
+\begin_layout LyX-Code
+Configuration item 'server ReportToSyslog' 
+\end_layout
+
+\begin_layout LyX-Code
+has a wrong value:
+\end_layout
+
+\begin_layout LyX-Code
+error: 'oui' is not boolean,
+\end_layout
+
+\begin_layout LyX-Code
+i.e.
+ not  'no' or 'yes'
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+cme refuses to load a corrupted file
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Error correction with CLI 2/2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+cme refuses to load a corrupted file, so use -force option:
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+$ sudo cme modify lcdproc 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+   'server ReportToSyslog=yes' -force
+\end_layout
+
+\begin_layout LyX-Code
+cme: using LCDd model
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+Changes applied to lcdproc configuration:
+\end_layout
+
+\begin_layout LyX-Code
+- server ReportToSyslog: 'no' -> 'yes'
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Warning detection
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Some warnings can be be fixed by cme:
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size scriptsize
+$ cme check dpkg
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+cme: using Dpkg model
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+loading data
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Reading package lists...
+ Done
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Building dependency tree       
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Reading state information...
+ Done
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Warning in 'control source Standards-Version' value '4.1.3': Current 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  standards version is '4.1.4'.
+ Please read https://www.[...]
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Warning in 'control source Vcs-Browser' 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  value 'https://anonscm.debian.org/[...]':
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  URL is not the canonical one for repositories hosted on 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  Debian infrastructure.
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Warning in 'control source Vcs-Git' 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  value 'https://anonscm.debian.org/[...]':
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  URL is not the canonical one for repositories hosted on 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  Debian infrastructure.
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+checking data
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+check done
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+you can try 'cme fix dpkg' to fix the warnings shown above
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Warnng correction
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Warning correction can be manual or automatic:
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size scriptsize
+$ cme fix dpkg 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+cme: using Dpkg model
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+cme: running fix on dpkg configuration...
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Reading package lists...
+ Done
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Building dependency tree 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Reading state information...
+ Done
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+[ ...
+ same warnings ...]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Changes applied to dpkg configuration:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+- control source Standards-Version has new value: '4.1.4'
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  # applied fix for :Current standards version is '4.1.4'.
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  Please read https://www.debian.org/doc/[...] for the changes 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  that may be needed on your package to upgrade it from 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  standard version '4.1.3' to '4.1.4'.
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+- control source Vcs-Browser has new value: 'https://salsa.[...]' 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  # applied fix for :URL is not the canonical one for repositories
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  hosted on Debian infrastructure.
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+- control source Vcs-Git has new value: 'https://salsa.[...]' 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  # applied fix for :URL is not the canonical one for repositories 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  hosted on Debian infrastructure.
+\end_layout
+
+\end_deeper
+\begin_layout ExampleBlock
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+cme script
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+cme scripts can be used for repetitive operations:
+\end_layout
+
+\begin_layout ExampleBlock
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size scriptsize
+$ cme run <TAB> <TAB>
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+add-me-to-uploaders paste-license update-copyright
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+bump-dependency-version remove-uploader update-my-copyright-year
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+-list set-vcs-git 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+$ cme run update-my-copyright-year -doc
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+update my copyright year
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+only copyright of last year is updated
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+will commit with message: 
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+ 'updated copyright year of Dominique Dumont'
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+$ cme run update-my-copyright-year
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+cme: using Dpkg::Copyright model
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+Changes applied to dpkg-copyright configuration:
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+- Files:"lib/*" Copyright: '2013-2017, Dominique Dumont.'
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  -> '2013-2018, Dominique Dumont.'
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+- Files:"script/*" Copyright: '2013-2017, Dominique Dumont.'
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+  -> '2013-2018, Dominique Dumont.'
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+[master 1d03cd73] updated copyright year of Dominique Dumont
+\end_layout
+
+\begin_layout LyX-Code
+
+\size scriptsize
+1 file changed, 3 insertions(+), 3 deletions(-)
+\end_layout
+
+\end_deeper
+\begin_layout ExampleBlock
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+GUI examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+With '
+\family typewriter
+sudo cme edit 
+\family default
+lcdproc':
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cme-edit-lcdproc.png
+	lyxscale 50
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Demo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+...
+ if I did not speak too much
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Next time: under the hood
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+During next presentation(s), we'll see:
+\end_layout
+
+\begin_layout Itemize
+how these check and GUI are generated from a model
+\end_layout
+
+\begin_layout Itemize
+how to update a model (with cme meta edit)
+\end_layout
+
+\begin_layout Itemize
+what are the pro and cons of creating a cme model for a project
+\end_layout
+
+\begin_layout Itemize
+how to create a cme script
+\end_layout
+
+\begin_layout Itemize
+next development steps for cme
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+For more information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "installation instructions"
+target "https://github.com/dod38fr/config-model/blob/master/README.install.pod"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "config-model wiki"
+target "https://github.com/dod38fr/config-model/wiki"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "config-model blog"
+target "https://ddumont.wordpress.com/category/perl/configmodel/"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "http://wiki.debian.org/PackageConfigUpgrade"
+target "Automatic config upgrade during package upgrade"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "https://github.com/dod38fr/config-model/wiki/Managing-Lcdproc-configuration-with-cme"
+target "Managing Lcdproc configuration with cme"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,87 @@
+#+TITLE: Terraform - IAC - What is it about ?
+#+AUTHOR: Dominique Dumont
+#+EMAIL: dominique@code-straight.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+
+# audience: all
+
+* COMMENT Announce
+
+ Terraform and /infrastructure as code/ - what is it about?
+
+* Who am I?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer since 2011
+- Open-Source contributor since 1996
+- Freelance devops since 2020
+
+* First approach
+
+the clickodrome:
+
+- show Azure or AWS console
+
+It's good to learn an environment...
+  
+* The problem
+
+When you want to make the production environment, you have to
+
+- to have noted all the details of the previous step
+- to remember what we did
+  (goldfish image)
+- not to make a mistake
+  (failed target image)
+
+* Complication
+
+in case of disaster:
+- what about the DRP (aka PRA in French) ?
+
+* 2nd approach
+
+CLI (aws or az).
+
+Problem:
+- idempotency
+- complexity (extracting information from commands and moving on to the next. E.g. resources uuid)
+  
+* Solution
+
+Apply the methods that work well with the software:
+
+- 
+- text
+- commit
+- CI
+
+* infra as code
+
+- ansible:
+  - ok for bare metal
+  - not necessarily reproducible (depends on playbook)
+- terraform:
+  - needs a cloud API
+  - idempotent
+  - immutable (explain)
+  - based on HCL
+- cloud formation:
+  - AWS only
+  - YAML "enriched
+- AWS CDK:
+  - Python-based
+  - allows to do anything and everything
+  - not necessarily idempotent
+
+TF vs ansible ?
+
+** Example Terraform
+
+
+* For more information
+
+
+

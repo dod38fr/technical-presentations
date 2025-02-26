@@ -1,0 +1,1162 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+% \setbeameroption{show only notes}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language swedish
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "keywordstyle={\color{blue}},language=Perl"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Copyright 2017, Dominique Dumont <domi.dumont@free.fr>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+This file can be redistributed and/or modified under the terms of the GNU
+ Public License, version 2.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+The reports of Perl's death have been greatly exaggerated 
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Perl is not dead
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subtitle
+
+\size scriptsize
+(with apologies to Mark Twain)
+\end_layout
+
+\begin_layout Author
+Dominique
+\begin_inset space ~
+\end_inset
+
+Dumont
+\end_layout
+
+\begin_layout Institute
+Senior software engineer (future freelance)
+\end_layout
+
+\begin_layout Date
+Jan 2018
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    %
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+
+\lang french
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+What is Perl ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A scripting language (half compiled)
+\end_layout
+
+\begin_layout Itemize
+Created by Larry Wall
+\end_layout
+
+\begin_layout Itemize
+Officially 
+\begin_inset Quotes sld
+\end_inset
+
+Practical Extraction and Report Language
+\begin_inset Quotes srd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Dubbed "the Swiss Army chainsaw of scripting languages" 
+\end_layout
+
+\begin_layout Itemize
+Similar scripting languages: ruby, php, nodejs and even python
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Perl5 History
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+perl1: 1987
+\end_layout
+
+\begin_layout Itemize
+perl2: 1988
+\end_layout
+
+\begin_layout Itemize
+perl3: 1989
+\end_layout
+
+\begin_layout Itemize
+perl4: 1991
+\end_layout
+
+\begin_layout Itemize
+perl5: 1994 (OOP)
+\end_layout
+
+\begin_layout Itemize
+5.001: 1995
+\end_layout
+
+\begin_layout Itemize
+5.002: 1996
+\end_layout
+
+\begin_layout Itemize
+5.003: 1996 (security)
+\end_layout
+
+\begin_layout Itemize
+5.004: 1997
+\end_layout
+
+\begin_layout Itemize
+5.005: 1998
+\end_layout
+
+\begin_layout Column
+7cm
+\end_layout
+
+\begin_layout Itemize
+5.6: 2000 (release: even minor nb)
+\end_layout
+
+\begin_layout Itemize
+5.8: 2002
+\end_layout
+
+\begin_layout Itemize
+5.10: 2007
+\end_layout
+
+\begin_layout Itemize
+5.12: 2010
+\end_layout
+
+\begin_layout Itemize
+now yearly release
+\end_layout
+
+\begin_layout Itemize
+5.26: 2017
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+See 
+\begin_inset CommandInset href
+LatexCommand href
+name "perl history"
+target "http://perldoc.perl.org/perlhist.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Perl6 History
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+dev start: ~ 2000
+\end_layout
+
+\begin_layout Itemize
+lot of cross-polinisation between Perl6 and Perl5
+\end_layout
+
+\begin_layout Itemize
+release: 2015
+\end_layout
+
+\begin_layout Itemize
+4 releases per year
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Perl5 and Perl6 (rakudo) are now considered as 2 different languages
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Strong points of Perl5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Regular expressions (used in other language php's pcre, java, javascript
+ ..)
+\end_layout
+
+\begin_layout Itemize
+UTF-8 support (regexp, case convertion...)
+\end_layout
+
+\begin_layout Itemize
+Installed by default on most Linux distributions
+\end_layout
+
+\begin_layout Itemize
+Available on Mac, Windows and older unixes (HP-UX)
+\end_layout
+
+\begin_layout Itemize
+C interface
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Old style OOP
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "old-oop.pl"
+lstparams "language=Perl,basicstyle={\\small}"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Moose style OOP
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "moose-oop.pl"
+lstparams "language=Perl,basicstyle={\\small}"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Moose features
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "Moose"
+target "http://moose.iinteractive.com/en/"
+
+\end_inset
+
+ provides
+\end_layout
+
+\begin_layout Itemize
+meta-programming (like ruby)
+\end_layout
+
+\begin_layout Itemize
+class composition (prefer roles instead of inheritance)
+\end_layout
+
+\begin_layout Itemize
+easy delegation of methods
+\end_layout
+
+\begin_layout Itemize
+run-time type checking
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Real world usage - Frozen Bubble
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Perl usage is not obvious:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Frozen-Bubble 2_008.jpg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "frozen-bubble home page"
+target "http://frozen-bubble.org/"
+
+\end_inset
+
+ using SDL perl
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Real world usage - other
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Perl can be used for a lot of different domains:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "booking.com"
+target "https://www.booking.com/"
+
+\end_inset
+
+: web site
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "gcstar"
+target "http://gcstar.org/"
+
+\end_inset
+
+: Movie collection manager based on Gtk
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Bio Perl"
+target "http://bioperl.org/"
+
+\end_inset
+
+: Perl tools for bioinformatics, genomics and life science
+\end_layout
+
+\begin_layout Standard
+See 
+\begin_inset CommandInset href
+LatexCommand href
+name "built-in-perl"
+target "http://www.builtinperl.com/"
+
+\end_inset
+
+website
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Misc modules
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Perl modules for many tasks, some examples:
+\end_layout
+
+\begin_layout Itemize
+graphical interfaces: 
+\begin_inset CommandInset href
+LatexCommand href
+name "GTk"
+target "http://gtk2-perl.sourceforge.net/doc/"
+
+\end_inset
+
+ (2 ad 3), 
+\begin_inset CommandInset href
+LatexCommand href
+name "SDL"
+target "http://sdl.perl.org/"
+
+\end_inset
+
+, 
+\begin_inset CommandInset href
+LatexCommand href
+name "OpenGL"
+target "https://sourceforge.net/projects/pogl/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "PDL"
+target "https://metacpan.org/pod/PDL"
+
+\end_inset
+
+: perl extension that is designed for scientific and bulk numeric data processin
+g and display
+\end_layout
+
+\begin_layout Itemize
+Text::Levenshtein::Damerau - Damerau Levenshtein edit distance.
+\end_layout
+
+\begin_layout Itemize
+Directory::Diff - recursively find differences between similar directories
+\end_layout
+
+\begin_layout Itemize
+Finance::Contract: represents a contract object for a single bet
+\end_layout
+
+\begin_layout Itemize
+Statistics::R - Perl interface with the R statistical program 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Web modules
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Lots of people are focused on Web development:
+\end_layout
+
+\begin_layout Itemize
+Web servers: 
+\begin_inset CommandInset href
+LatexCommand href
+name "Mojolicious"
+target "http://mojolicious.org/"
+
+\end_inset
+
+, 
+\begin_inset CommandInset href
+LatexCommand href
+name "catalyst"
+target "http://www.catalystframework.org/"
+
+\end_inset
+
+, 
+\begin_inset CommandInset href
+LatexCommand href
+name "Dancer"
+target "http://perldancer.org/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Web user agent: Mojolicious (async) and 
+\begin_inset CommandInset href
+LatexCommand href
+name "LWP"
+target "http://search.cpan.org/dist/libwww-perl/lib/LWP.pm"
+
+\end_inset
+
+(synchronous)
+\end_layout
+
+\begin_layout Itemize
+Modules for YAML, JSON, XML
+\end_layout
+
+\begin_layout Itemize
+WWW::SMS - sends SMS using service provided by free websites
+\end_layout
+
+\begin_layout Itemize
+WWW::FBX - Freebox v6 OS Perl Interface
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Database modules
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+database connection provided by 
+\begin_inset CommandInset href
+LatexCommand href
+name "DBI"
+target "https://dbi.perl.org/"
+
+\end_inset
+
+ (MySQL, Oracle, SQLite, Postgress.
+ ...)
+\end_layout
+
+\begin_layout Itemize
+ORM provided by 
+\begin_inset CommandInset href
+LatexCommand href
+name "DBIx::Class"
+target "http://www.dbix-class.org/"
+
+\end_inset
+
+.
+ Glue code can be generated from DB schema.
+ Still allow to use SQL when needed.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "MongoDB"
+target "https://metacpan.org/pod/MongoDB"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Strong point of Perl ecosystem
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Its welcoming community
+\end_layout
+
+\begin_layout Itemize
+Culture of backward compat in CPAN:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+most modules have non-regression tests
+\end_layout
+
+\begin_layout Itemize
+breaking backward compat is the exception
+\end_layout
+
+\begin_layout Itemize
+deprecation warning before breaking changes
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Lots of documentation
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "cpan testers"
+target "http://www.cpantesters.org/"
+
+\end_inset
+
+: tests Perl modules on many platforms X Perl release
+\end_layout
+
+\begin_layout Itemize
+Many modules are available as native packages in major distributions (~
+ 3500 modules for Debian)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+For more information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Modern Perl"
+target "http://onyxneon.com/books/modern_perl/"
+
+\end_inset
+
+ book by Chromatic
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+target "https://www.perl.com/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.perl6.org/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "metacpan"
+target "https://metacpan.org/"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\end_body
+\end_document

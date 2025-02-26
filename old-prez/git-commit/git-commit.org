@@ -1,0 +1,215 @@
+#+TITLE: Comment faire un commit plus utile ?
+#+AUTHOR: Dominique Dumont
+#+EMAIL: domi.dumont@free.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+
+# audience: all
+
+* COMMENT annonce
+Comment faire un git commit de qualité ?
+
+Au boulot, on reçoit souvent des formations rapides sur git où on archive du code un peu comme on vide sa poubelle: en vrac.
+
+Le but de cette présentation est de vous montrer:
+- les avantages à bien préparer les commits
+- faire le tri avant de commiter
+- accompagner un commit avec des informations pertinentes
+
+Présentation donnée au Human Talks de Grenoble le 11.02.2020
+
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer depuis 2011
+- Contributeur Open-Source depuis 1996
+- Freelance à partir du 21 Mars
+
+* C'est un quoi un commit ?
+
+Faire un commit est une action pour archiver:
+- une modification de code (le /diff/)
+- l'auteur
+- la date
+- un texte expliquant la nature et le contexte du changement
+
+** Exemple
+
+file:git-show.png
+
+* Pourquoi fait-on des commits ?
+
+- Pour aider le mainteneur du code
+- Peut-être vous dans 6 mois
+- Pour faciliter les recherches de régression (~git bisect~)
+- Pour aider l'analyse du code
+- Pour faciliter la revue de code
+
+* Que faut-il pour analyser le code
+
+- Les bonnes pratiques pour un commit:
+  - Un résumé du changement en 1^{ère} ligne
+  - Dans quel but le changement a été fait (n° de ticket ? quel
+    problème ? lien ? autre numéro de commit ?)
+  - Atomique: un changement à la fois
+- Si édition de code automatisée (/reformat/ or /refactoring/)
+  - Fait avec quel outil ou quelle commande ?
+
+** Exemple: commit atomique
+
+Un changement à la fois:
+
+#+BEGIN_SRC 
+c045ca17 AnyId: replace void maps with for loops
+9c5ca713 Value: split check_value method
+d6c5bdfd test warning with log4perl in value_compute.t
+aab01533 Value: rename internal method
+cf64fbbc Value: factorize loop
+fa394483 remove redundant AUTHOR section
+bfe5cf36 small reformatting
+5ee007f7 remove dead code
+#+END_SRC
+
+** Exemple: commit log avec du contexte
+
+#+BEGIN_SRC 
+commit 52e98111c95a2a08bf38be7111a0bc61f97239d2
+Author: Dominique Dumont <dod@debian.org>
+Date:   Sat Nov 23 19:09:34 2019 +0100
+
+    Value: skip check sub when check param is no
+    
+    This avoids infinite recursion (seen with dpkg model):
+    1. a checked value in a list requires the content of 
+       its parent list to perform a special verification
+    2. the list run fetch on all its value
+    3. this fetch trigger a check on all value, including
+       the one mentioned in step 1.
+    4. goto 1.
+#+END_SRC
+
+* Les techniques pour un commit atomique
+
+** Si un refactoring est nécessaire
+
+- Archiver le /refactoring/ avant de faire la nouvelle fonction.
+- Archiver un /refactoring/ à la fois
+- Archiver séparément les re-formatages
+- Ne commiter un changement de doc que si il accompagne un changement
+  dans le code
+
+Attention: Les tests doivent toujours passer (et ne pas être
+modifiés pour le /refactoring/).
+
+** Test Driven Development vs Commit
+
+- Phase de développement:
+  - TDD: on casse les tests et on répare
+  - commit: les tests doivent passer pour tous les commits (~git bisect~)
+- Phase d'archivage, commiter soit:
+  - le code avec les tests (si pas trop gros)
+  - le code, puis les tests
+
+* Si trop enthousiaste
+
+/Oops, j'ai oublié de faire des commits/ 😅
+
+* Quelques notions ...
+
+... pour la suite
+
+** /diff/ and /hunk/
+
+Ici, un /diff/ avec 2 /hunks/:
+
+file:diff-hunk.png
+
+** workspace and index
+
+#+BEGIN_SRC plantuml :file workspace-index.png :eval no-export
+
+  @startuml
+  actor dev
+  dev --> (workspace): save file
+  note right of dev: code code code ...
+
+  (workspace) -> (index) : stage\ngit add --patch
+  (index) -> (repo local) : git commit
+  @enduml
+#+END_SRC
+#+RESULTS:
+[[file:workspace-index.png]]
+
+* Rattraper ses erreurs
+
+** Commit par /hunk/
+
+- Commit /hunk/ par /hunk/ en CLI avec:
+  - ~git add --patch~
+
+** commit ligne par ligne
+
+- ~git gui~ (GUI)
+- ~magit~ (avec emacs)
+
+Ces commandes peuvent aussi commiter par /hunk/.
+
+** Example: git gui
+
+#+ATTR_HTML: :style max-width: 80%
+[[file:git-gui-stage-lines.png]]
+
+* Et les tests avant commit ?
+
+Rappel:
+- on archive le changement contenu dans l'index
+- on teste les changement workspace *et* index
+
+Comment tester ce que l'on va commiter 
+sans le /contenu du workspace/ ?
+
+** git stash à la rescousse
+
+#+BEGIN_SRC plantuml :file workspace-index-stash.png :eval no-export
+  @startuml
+
+  workspace <-> index : stage/unstage avec git gui
+  note left: isolation d'un changement atomique
+
+  workspace -> stash: git stash push --keep-index
+  note left: mettre de coté les autres modifs
+
+  workspace -> workspace: make test
+  note left: test avant commit
+
+  index -> local_repo: git commit
+  note left: archiver **un** fix
+
+  stash -> workspace: git stash pop
+  note left: récupérer les autres modifs
+
+  @enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:workspace-index-stash.png]]
+
+* Si j'ai fait un commit en vrac ?
+
+- Avant ~push~:
+  - ~git rebase -i~
+- Après un ~push~:
+  - demandez pardon aux collègues 😇
+  - évitez un ~push --force~ (peut aggraver le point précédent)
+
+* Pour plus d'information
+
+- Pratiques:
+  - [[https://chris.beams.io/posts/git-commit/][How to Write a Git Commit Message]]
+  - [[https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/][How to Write Good Commit Messages: A Practical Git Guide]]
+- Outils:
+  - [[https://www.tecmint.com/best-gui-git-clients-git-repository-viewers-for-linux/][11 Best Graphical Git Clients and Git Repository Viewers for Linux]]
+  - [[https://magit.vc/][Magit: A Git Porcelain inside Emacs]]
+- Plein d'exemples de logs:
+  - [[https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/][Linux kernel commits]]
