@@ -203,9 +203,7 @@ relation =many2many= déduite à partir dy  type =Language=
   	"jinzhu").Scan(&result)
 #+end_src
 
-
 * Effets de bord
-
 ** Couplage
 
 En voulant faire [[https://talks.freelancerepublik.com/principe-dry-dont-repeat-yourself/][DRY]], il est tentant d'avoir
@@ -223,19 +221,19 @@ type User struct {
 - la même structure est utilisée pour l'API, le controlleur et l'adapteur de la DB
 - une modification d'un côté casse tout (couplage fort)
 
-** Copie de stucture
+** Nombre de copies de structures
 
-- Pour éviter les couplages: Avoir des structures dédiées pour l'API,
+- Pour éviter les couplages: Créeer des structures dédiées pour l'API,
   les controlleurs (=CtrlStruct=) et la DB (=DbStruct=)
-- Avec ORM:
+- 2 copies avec ORM:
   - copier les données de =CtrlStruct= vers =DbStruct=
   - appeller l'ORM (qui copie les données de =DbStruct= pour les envoyer à la DB)
-- Sans ORM:
+- 1 copie sans ORM:
   - copier les données de =DbStruct= pour envoi à la DB
 
 ** Déboguage
 
-En cas de problème
+En cas de problème:
 - Besoin de lire les logs de Gorm qui montrent les requêtes SQL
 - avec des tables de liaisons créées par Gorm
 - Besoin d'expertise SQL déboguer
