@@ -3,25 +3,29 @@
 #+email: dominique@code-straight.fr
 #+OPTIONS: ^:{}
 
+#+REVEAL_THEME: beige
+#+REVEAL_EXTRA_CSS: ./pres.css
+#+OPTIONS: toc:nil
+
 * Qui suis-je ?
 
 - Dominique Dumont (@dod38fr)
+- Freelance devops depuis 2020
 - Debian Developer depuis 2011
 - Contributeur en Open-Source depuis 1996
-- Freelance devops depuis 2020
 
 * Gorm ?
 
-- ORM en Go
-- [[https://gorm.io/][GORM - The fantastic ORM library for Golang, aims to be developer friendly.]] 😮
-- ORM: "Object Relational Mapper"
-- la promesse:
+- ORM: Object Relational Mapper
+- «[[https://gorm.io/][GORM - The fantastic ORM library for Golang, aims to be developer friendly.]]»
+
+** COMMENT la promesse:
   - pouvoir créer une schema à partir du code Go
   - transmettre les données de structures Go dans les tables SQL
   - et inversement
   - gérer aussi les structures imbriquées
 
-* Création de modèle
+* COMMENT Création de modèle
 
 - Gorm est capable de créer la schema à partir des structures Go
 - Gorm est aussi capable d'exploiter une schema existante
@@ -39,7 +43,7 @@ type User struct {
 
 🩹 types =sql.NullString= pour des notions SQL (null type)
 
-** Contraintes sur les champs
+** COMMENT Contraintes sur les champs
 
 Le contraintes typiques de SQL sont faites avec des tags:
 
@@ -64,9 +68,6 @@ type User struct {
 
   // pass pointer of data to Create
   result := db.Create(&user)
-
-  result.Error        // returns error
-  result.RowsAffected // returns inserted records count
 #+end_src
 
 Bien pratique sur les structures longues.
@@ -97,27 +98,12 @@ Verbeux mais explicite.
   }
   var users []User
 
-  db.Where("name LIKE ?", "%jin%").Find(&users)
-  // SELECT * FROM users WHERE name LIKE '%jin%';
+  // Get all matched records
+  db.Where("name == ?", "jinzhu").Find(&users)
+  // SELECT * FROM users WHERE name <> 'jinzhu';
 #+end_src
 
-👁️‍🗨️ Connaissances en DB requises pour le =LIKE=
-
-** Avec ORM
-
-Pas forcément intuitif:
-
-#+begin_src go
-    type User struct {
-    	Name string
-    	Age int
-    	Birthday Time
-    }
-    var users []User
-
-  db.Find(&users, []int{1,2,3})
-  // SELECT * FROM users WHERE id IN (1,2,3);
-#+end_src
+ ⚠️« =SELECT *= » sur des grandes tables
 
 ** Sans ORM
 
@@ -127,9 +113,10 @@ Pas forcément intuitif:
   )SQL");
 
   is_read_q.bind(1, message_id);
-  
+  bool is_read;
+
   while (is_read_q.executeStep()) {
-    return is_read_q.getColumn(0).getInt() == 1;
+    is_read = is_read_q.getColumn(0).getInt() == 1;
   }
 #+end_src
 
@@ -137,21 +124,21 @@ Pas forcément intuitif:
 
 ** avec ORM - déclaration
 #+begin_src go
-// User has and belongs to many languages, `user_languages` is the join table
-type User struct {
-  gorm.Model
-  Languages []Language `gorm:"many2many:user_languages;"`
-}
+  // User has and belongs to many languages, `user_languages`
+  // is the join table
+  type User struct {
+    gorm.Model
+    Languages []Language `gorm:"many2many:user_languages;"`
+  }
 
-type Language struct {
-  gorm.Model
-  Name string
-}
+  type Language struct {
+    gorm.Model
+    Name string
+  }
 #+end_src
 
-relation =many2many= déduite à partir dy  type =Language=
-
-👁️‍🗨️ notions SQL: =many2many=, =join table=
+- relation =many2many= déduite à partir du  type =Language=
+- 👁️‍🗨️ notions SQL requises: =many2many=, =join table=
 
 ** avec ORM - lecture
 
@@ -162,7 +149,7 @@ relation =many2many= déduite à partir dy  type =Language=
   	Find(&users).Error
 #+end_src
 
-- 🎃 méthode =Preload= pas intuitive
+🎃 méthode =Preload= pas intuitive
 
 ** sans ORM - lecture
 
@@ -183,13 +170,13 @@ relation =many2many= déduite à partir dy  type =Language=
 #+end_src
 
 - Verbeux,  mais explicite.
-- on peut valider la requête avec =sqlitebrowser= (ou =DBeaver=)
+- 💡créer la requête avec =sqlitebrowser= (ou =DBeaver=)
 
-* Contourner Gorm
+* Astuce:  contourner Gorm
 
 - pour les requêtes les plus complexes:
-  - création d'une structure ah-hoc pour récupérer les résultats
-  - écriture d'une requête SQL 
+  - créer une structure ah-hoc pour récupérer les résultats
+  - écrire la requête en SQL 
 
 #+begin_src go
   type Result struct {
@@ -218,25 +205,28 @@ type User struct {
 }
 #+end_src
 
-- la même structure est utilisée pour l'API, le controlleur et l'adapteur de la DB
+- la même structure est utilisée pour l'API, le contrôleur et l'adaptateur de la DB
 - une modification d'un côté casse tout (couplage fort)
-
-** Nombre de copies de structures
-
-- Pour éviter les couplages: Créeer des structures dédiées pour l'API,
-  les controlleurs (=CtrlStruct=) et la DB (=DbStruct=)
-- 2 copies avec ORM:
-  - copier les données de =CtrlStruct= vers =DbStruct=
-  - appeller l'ORM (qui copie les données de =DbStruct= pour les envoyer à la DB)
-- 1 copie sans ORM:
-  - copier les données de =DbStruct= pour envoi à la DB
 
 ** Déboguage
 
 En cas de problème:
-- Besoin de lire les logs de Gorm qui montrent les requêtes SQL
+- lire les logs de Gorm qui montrent les requêtes SQL
 - avec des tables de liaisons créées par Gorm
-- Besoin d'expertise SQL déboguer
+- 😑 besoin d'expertise SQL pour interpréter les logs
+
+** Perf: copies de structures
+
+- Pour éviter les couplages: créer des structures dédiées pour:
+  - l'API,
+  - les controleurs (=CtrlStruct=)
+  - la DB (=DbStruct=)
+- Traitement:
+  - 2 copies avec ORM:
+    - de =CtrlStruct= vers =DbStruct=
+    - de =DbStruct= vers DB API
+  - 1 copie sans ORM:
+    - de =CtrlStruct= vers DB API
 
 * Conclusions 1/2
 
@@ -246,7 +236,7 @@ En cas de problème:
   - prototype
 - ORM déconseillé:
   - besoin de perf sur des requêtes complexes
-  - lecture d'une colonne à la fois
+  - lecture de quelques colonnes à la fois
 
 * Conclusions 2/2
 
