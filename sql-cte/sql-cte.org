@@ -179,17 +179,6 @@ select * from tmp_msg
   where parent_id isnull
 #+end_src
 
-** CTE récursive - nettoyage
-
-#+begin_src sqlite :db ht-cte.db :colnames yes
-  with recursive tmp_msg(message_key, parent_id) as (
-    select message_key, parent_id from message where message_key = "m1.1.1"
-    union all
-    select a.message_key, a.parent_id from message as a
-    join tmp_msg on a.id = tmp_msg.parent_id
-  )
-  select message_key from tmp_msg where parent_id isnull
-#+end_src
 
 * Autre exemple: tous les fils
 
