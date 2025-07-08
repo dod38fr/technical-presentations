@@ -1,0 +1,216 @@
+#+TITLE: SQL Common Table Expression
+#+author: Dominique Dumont
+#+email: dominique@code-straight.fr
+#+OPTIONS: ^:{}
+
+# cf https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-sqlite.html
+
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer depuis 2011
+- Contributeur Open-Source depuis 1996
+- Devops freelance depuis 2020
+
+* C'est quoi une CTE ?
+
+- Common Table Expressions
+- Fait partie du SQL, langage d'interrogation de base de donnée relationelle
+- permet de rentre le SQL plus lisible
+- permet de définir des tables temporaires exploitées par des requêtes
+- supporte la récursivité
+
+* Comment ça fonctionne ?
+
+** COMMENT Example: un arbre
+#+begin_src plantuml :file tree.png
+  @startuml
+  (m1) --> (m1.1)
+  (m1) --> (m1.2)
+  (m1.1) --> (m1.1.1)
+  (m2) --> (m2.1)
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:tree.png]]
+
+** Exemple arbre: des messages
+
+- hiérarchie de messages
+- les msg_id représentent un chemin (/path/) pour faciliter la
+  compréhension
+
+#+RESULTS[c5ae9b6b02607091499d0cd31f80090237e75afd]:
+[[file:tree.png]]
+
+
+
+** Exemple: la table des messages
+
+#+begin_src sqlite :db ht-cte.db :results raw
+  drop table if exists message;
+  create table message (
+    -- clef privée (surrogate key)
+    id integer primary key asc autoincrement,
+    -- définie une structure en arbre
+    parent_id integer references message (id) on delete set null,
+    -- clef métier (natural key)
+    message_key text not null unique,
+    subject text
+  );
+#+end_src
+
+#+RESULTS:
+
+** COMMENT Ajout de quelques messages
+
+#+begin_src sqlite :db ht-cte.db :results raw
+  insert into message (parent_id, message_key, subject)
+  values (NULL,"m1","bla-bla"),
+    (1,"m1.1","Re: bla-bla"),
+    (2,"m1.1.1","Re: Re: bla-bla"),
+    (1,"m1.2","Re: bla-bla"),
+    (NULL, "m2", "meh"),
+    (5, "m2.1", "Re: meh")
+#+end_src
+
+#+RESULTS:
+
+** les messages dans la table
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+  select * from message
+#+end_src
+
+
+** Exemple: Trouver un parent
+
+Ici, pas besoin de CTE, mais la logique de la requête est à l'envers:
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+    -- 2. trouver le message_key du parent
+    select message_key, subject from message
+    where id == (
+      -- 1. trouver l'id du parent
+      select parent_id from message where message_key = "m1.1.1"
+    )
+  #+end_src
+
+** Exemple: Trouver un parent avec une CTE
+
+- but: éviter la sous-requête
+- construit une table temporaire utilisable dans la requête suivante
+  
+  #+begin_src sqlite :db ht-cte.db :colnames yes
+    -- trouver l'id du parent
+    with parent(id) as (
+      select parent_id from message where message_key = "m1.1.1"
+    ) 
+    -- trouver le message_key du parent
+    select message_key, subject from message,parent
+    where message.id == parent.id
+  #+end_src
+
+** Problème: trouver le premier message d'un fil
+
+- besoin de récursion
+- CTE simple non suffisante
+
+** CTE récursive - 1ere étape de la récursion
+
+- paramètres nécessaire: =parent_id=
+- =id= et =subject= sont présent pour faciliter la compréhension
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+with recursive tmp_msg(id, message_key, subject, parent_id) as (
+  select id, message_key, subject, parent_id from message
+  where message_key = "m1.1.1"
+)
+select * from tmp_msg
+#+end_src
+
+** CTE récursive - mise en place de la récursion
+
+- récursion: la 2e requête utilise la table définie avec /with/
+  
+#+begin_src sqlite :db ht-cte.db :colnames yes
+   with recursive tmp_msg(id, message_key, subject, parent_id) as (
+   -- étape 1
+     select id, message_key, subject, parent_id from message
+     where message_key = "m1.1.1"
+     union all -- pour coller les autres étapes
+     select a.id, a.message_key, a.subject, a.parent_id from message as a
+     join tmp_msg where a.id = tmp_msg.parent_id -- 🎯 la récursion est là
+     limit 10 -- filet anti crash pour le debug
+   )
+   select * from tmp_msg
+#+end_src
+
+** CTE récursive - sous le capot
+
+- ajout de la variable =count= pour voir les étapes
+- chaque étape voit le résultat de l'étape précédente
+  
+#+begin_src sqlite :db ht-cte.db :colnames yes
+   with recursive tmp_msg(count, id, message_key, subject, parent_id) as (
+     -- étape 1
+     select 1, id, message_key, subject, parent_id from message
+       where message_key = "m1.1.1"
+     union all 
+     select count+1, a.id, a.message_key, a.subject, a.parent_id from message as a
+     join tmp_msg on a.id = tmp_msg.parent_id
+   )
+   select * from tmp_msg
+#+end_src
+
+** CTE récursive - récupération du résultat:
+
+- enlever toutes les variables inutiles
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+  with recursive tmp_msg(id, message_key, subject, parent_id) as (
+    select id, message_key, subject, parent_id from message where message_key = "m1.1.1"
+    union all
+    select a.id, a.message_key, a.subject, a.parent_id from message as a
+    join tmp_msg on a.id = tmp_msg.parent_id
+  )
+  select message_key, subject from tmp_msg
+  where parent_id isnull
+#+end_src
+
+** CTE récursive - nettoyage
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+  with recursive tmp_msg(message_key, parent_id) as (
+    select message_key, parent_id from message where message_key = "m1.1.1"
+    union all
+    select a.message_key, a.parent_id from message as a
+    join tmp_msg on a.id = tmp_msg.parent_id
+  )
+  select message_key from tmp_msg where parent_id isnull
+#+end_src
+
+* Autre exemple: tous les fils
+
+#+begin_src sqlite :db ht-cte.db :colnames yes
+  with recursive tmp_msg(id) as (
+    select id from message where message_key = "m1"
+    union all
+    select a.id from message as a
+    join tmp_msg where a.parent_id = tmp_msg.id
+  )
+  select message_key, subject from tmp_msg
+  join message on message.id == tmp_msg.id
+#+end_src
+
+
+* Conclusion
+
+- les CTEs peuvent clarifier le code SQL
+- Gain de performance en évitant les allers et retours entre le service
+  et la DB
+- on peut définir plusieurs tables dans une CTE
+- attention:
+  - au nommage des tables temporaires
+  - aux différences possibles entre les databases (MySQL, Postgress...)
