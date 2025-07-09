@@ -23,7 +23,7 @@
 * Comment ça fonctionne ?
 
 ** COMMENT Example: un arbre
-#+begin_src plantuml :file tree.png
+#+begin_src plantuml :file tree.png :exports none
   @startuml
   (m1) --> (m1.1)
   (m1) --> (m1.2)
@@ -79,7 +79,7 @@
 
 ** les messages dans la table
 
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
   select * from message
 #+end_src
 
@@ -88,12 +88,12 @@
 
 Ici, pas besoin de CTE, mais la logique de la requête est à l'envers:
 
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
     -- 2. trouver le message_key du parent
     select message_key, subject from message
     where id == (
       -- 1. trouver l'id du parent
-      select parent_id from message where message_key = "m1.1.1"
+      select parent_id from message where message_key = "m1.1"
     )
   #+end_src
 
@@ -102,7 +102,7 @@ Ici, pas besoin de CTE, mais la logique de la requête est à l'envers:
 - but: éviter la sous-requête
 - construit une table temporaire utilisable dans la requête suivante
   
-  #+begin_src sqlite :db ht-cte.db :colnames yes
+  #+begin_src sqlite :db ht-cte.db :colnames yes :exports both
     -- trouver l'id du parent
     with parent(id) as (
       select parent_id from message where message_key = "m1.1.1"
@@ -122,7 +122,7 @@ Ici, pas besoin de CTE, mais la logique de la requête est à l'envers:
 - paramètres nécessaire: =parent_id=
 - =id= et =subject= sont présent pour faciliter la compréhension
 
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
 with recursive tmp_msg(id, message_key, subject, parent_id) as (
   select id, message_key, subject, parent_id from message
   where message_key = "m1.1.1"
@@ -152,7 +152,7 @@ select * from tmp_msg
 - ajout de la variable =count= pour voir les étapes
 - chaque étape voit le résultat de l'étape précédente
   
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
    with recursive tmp_msg(count, id, message_key, subject, parent_id) as (
      -- étape 1
      select 1, id, message_key, subject, parent_id from message
@@ -182,7 +182,7 @@ select * from tmp_msg
 
 * Autre exemple: tous les fils
 
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
   with recursive tmp_msg(id) as (
     select id from message where message_key = "m1"
     union all
