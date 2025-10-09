@@ -30,6 +30,7 @@
 - ~sudo apt install un-logiciel~
 - ~npm install -g unLogiciel~
 - ~brew install unLogiciel~
+- =go install github.com/acme/un-logiciel=
 - ~choco install un-logiciel~
 - ~docker run acme/un-logiciel~
 - ~curl https://acme.com/un-logiciel.sh | sudo bash -~
@@ -62,15 +63,26 @@ Mais:
 file:logo-gnupg-light-purple-bg.png
 
 Utiliser de la crypto (~gpg~) pour vérifier le contenu. Dans l'exemple avec
-~cme~, ~apt~ et ~gpg~ vérifient:
-- l'intégrité du logiciel
-- que le logiciel a été signé par ~dod@debian.org~
+~cme~, les outils Debian vérifient:
+- l'intégrité du paquet à installer
+- que le paquet a été signé par l'infra Debian
+- que le paquet a été construit à partir d'un source signé par
+  ~dod@debian.org~
 - que ~dod@debian.org~ est sur la liste des personnes autorisées 
 
 #+BEGIN_NOTES
-Le paquet est signé avec la clef privée de ~dod~.
-La clef publique de ~dod@debian.org~ est dans le paquet ~debian-keyring~
-
+C'est un résumé, en pratique, c'est plus compliqué:
+- Le paquet source est signé avec la clef privée de ~dod~.
+- il est vérifié par Debian
+- re-signé avec une clef controllée par le projet
+- compilé
+- le paquet binaire est envoyé sur une archive controllée par Debian
+- un inventaire des paquet avec leur hash est construit
+- cet inventaire est signé avec  avec une clef controllée par le projet
+- cet inverntaire et les paquets sont mirrorés sur les serveurs
+- apt télécharge et vérifie cet inventaire
+- le hash de chaque paquet est vérifié avant installation
+La clef publique de ~dod@debian.org~ et les clefs du projet sont dans le paquet ~debian-keyring~
 #+END_NOTES
 
 ** Problème
@@ -99,7 +111,7 @@ Chaque développeur Debian peut:
 - vérifier l'identité d'une personne (pièce d'identité requise)
 - signer la clef publique gpg de cette personne avec sa clef privée
 - et réciproquement
-- étape indispensable pour qu'un contributeur devienne développeur Debian
+- cette étape est indispensable pour qu'un contributeur devienne développeur Debian
 
 * Et la confiance dans tout ça ?
 
@@ -116,7 +128,36 @@ Quelle est chaîne de confiance de votre gestionnaire de paquet favori?
 
 Y-a t'il des points faibles ?
 
-* Application pratique
+** COMMENT Go Terraform - Github
+# outside my jurisdiction
+
+- peu ou pas de signatures dans les repos
+- authentification nécessaire pour pousser du contenu
+- pas d'identité derrière les comptes github
+- basé uniquement sur la confiance sur un compte anonyme
+- ou sur la confiance que d'autre personnes ont lu le code
+
+* COMMENT Implémentation dans Debian
+
+** COMMENT Mise à jour des signatures des Debian Developers
+
+- Quand ?
+  - pour les nouveaux contributeurs
+  - mise à jour des dates d'expiration des clefs
+- Comment ?
+  - envoi des clefs sur =keyring.debian.org=
+
+** COMMENT Cycle de vie des paquets
+
+- un paquet source est signé par un Debian Dev
+- la signature est vérifiée sur les serveurs Debian
+- le paquet binaire est signé par une clef debian
+- le paquet binaire et sa signature sont envoyés sur les serveurs
+  de paquet
+- sur vos système le paquet binaire est vérifié par =apt=
+- plus d'info: [[https://manpages.debian.org/buster/apt/apt-secure.8.en.html][apt-secure(8)]]
+      
+* COMMENT Application pratique
 
 Si vous voulez contribuer à Debian, je peux signer vos clefs à
 l'apéro.
