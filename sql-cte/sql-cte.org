@@ -134,7 +134,7 @@ select * from tmp_msg
 
 - récursion: la 2e requête utilise la table définie avec /with/
   
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
    with recursive tmp_msg(id, message_key, subject, parent_id) as (
    -- étape 1
      select id, message_key, subject, parent_id from message
@@ -168,7 +168,7 @@ select * from tmp_msg
 
 - enlever toutes les variables inutiles
 
-#+begin_src sqlite :db ht-cte.db :colnames yes
+#+begin_src sqlite :db ht-cte.db :colnames yes :exports both
   with recursive tmp_msg(id, message_key, subject, parent_id) as (
     select id, message_key, subject, parent_id from message where message_key = "m1.1.1"
     union all
