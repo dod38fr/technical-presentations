@@ -9,6 +9,12 @@
 
 # audience: window and mac users on top of linux users (if any). Some beginners
 
+* Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Freelance devops depuis 2020
+- Debian Developer depuis 2011
+- Contributeur en Open-Source depuis 1996
 
 * Qu'est que le projet Debian
 
