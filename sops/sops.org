@@ -1,0 +1,204 @@
+#+TITLE: Sops / Pour stocker des secrets sous git
+#+author: Dominique Dumont
+#+email: dominique@code-straight.fr
+#+OPTIONS: ^:{}
+
+* COMMENT Qui suis-je ?
+
+- Dominique Dumont (@dod38fr)
+- Debian Developer since 2011
+- Open-Source contributor since 1996
+- Freelance devops since 2020
+
+* Problème à résoudre
+
+- pouvoir stocker des secrets sous git
+- chiffrer pour protéger les secrets
+- autoriser ou révoquer des contributeurs
+- support des stockage de clef comme keyVault
+  
+* Une solution: sops
+- [[https://github.com/getsops/sops][sops: Simple and flexible tool for managing secrets]]
+  
+* Créer un fichier chiffré
+
+Chiffrer avec ma clef gpg:
+
+#+begin_src tmux :session sops :eval never-export
+  clear; cd /tmp
+  echo "secure_password: 1234" > secrets.yaml
+  sops encrypt --in-place --pgp $DEB_SIGN_KEYID secrets.yaml
+#+end_src
+
+** Le fichier chiffré
+
+#+begin_src tmux :session sops :eval never-export
+  clear;
+  cat /tmp/secrets.yaml  
+#+end_src
+
+** Modifier le fichier
+
+#+begin_src tmux :session sops :eval never-export
+  clear; cd /tmp
+  sops edit secrets.yaml
+  cat secrets.yaml
+#+end_src
+
+** Autoriser une autre personne
+
+Ajouter une autre clef gpg:
+#+begin_src tmux :session sops :eval never-export
+  clear; cd /tmp
+  sops rotate --in-place --add-pgp D1E1316E93A760A8104D85FABB3A68018649AA06 secrets.yaml
+  cat secrets.yaml
+#+end_src
+
+** Supprimer une autorisation
+
+Supprimer sa clef gpg:
+#+begin_src tmux :session sops :eval never-export
+  clear; cd /tmp
+  sops rotate --in-place --rm-pgp D1E1316E93A760A8104D85FABB3A68018649AA06 secrets.yaml
+  cat secrets.yaml
+#+end_src
+
+⚠️ Ne pas retirer ma propre clef
+
+* Support d'autres clefs
+
+sops supporte:
+- Azure Key Vault
+- GCP KMS
+- Hashicorp  Vault
+- age
+
+* Utilisation
+
+** Avec Terraform - source
+
+#+begin_src shell :results verbatim :wrap src terraform :exports results
+  cat terraform/main.tf  
+#+end_src
+
+#+RESULTS:
+#+begin_src terraform
+data "sops_file" "demo-secret" {
+  source_file = "/tmp/secrets.yaml"
+}
+
+output "password" {
+  # Access the password variable from the map
+  value     = data.sops_file.demo-secret.data["secure_password"]
+  sensitive = true
+}
+#+end_src
+
+** Avec Terraform - demo
+
+#+begin_src  tmux :session sops :var dir=pwd :eval never-export
+  clear;
+  cd $dir/terraform
+  terraform init
+  terraform apply --auto-approve
+  terraform output password
+#+end_src
+
+
+** Avec Terragrunt - source
+
+#+begin_src shell :results verbatim :wrap src hcl :exports results
+  cat terragrunt/terragrunt.hcl  
+#+end_src
+
+#+RESULTS:
+#+begin_src hcl
+locals {
+  secret = yamldecode(sops_decrypt_file("/tmp/secrets.yaml"))
+}
+
+inputs = local.secret
+
+terraform {
+    source = "main.tf"
+}
+#+end_src
+
+** Avec Terragrunt - demo
+
+#+begin_src  tmux :session sops :var dir=pwd :eval never-export
+  clear;
+  cd $dir/terragrunt
+  terragrunt apply --auto-approve
+#+end_src
+
+* Fonctionnement
+
+Chiffrage (simplifié):
+
+[[file:./encrypt.png]]
+
+Voici les [[https://github.com/getsops/sops?tab=readme-ov-file#6encryption-protocol][détails]] du protocole de chiffrage
+
+* Alternatives
+
+- [[https://www.agwa.name/projects/git-crypt/][git-crypt]]:
+  - chiffre fichier par fichier
+  - pas de révocation d'utilisateur
+  - fichier déchiffré par =git-filter= au checkout.
+    
+*     
+[[file:../gorm-orm/that_s_all_folks__by_surrimugge-d6rfav1.png]]
+
+* setup
+
+#+name: pwd
+#+begin_src shell
+pwd  
+#+end_src
+
+#+RESULTS: pwd
+: /home/domi/private/meetups/my-prez/sops
+
+* COMMENT plantuml
+
+#+begin_src plantuml :file encrypt.png
+    @startuml
+    left to right direction
+
+    package "master key encryption" {
+            [ master key ] as mk
+            [ encrypted master key 1 ] as emk1
+            [ encrypted master key 2 ] as emk2
+    }
+
+    package "gpg keys" {
+    [ gpg pub key id of user 1 ] as gpg1
+    [ gpg pub key id of user 2 ] as gpg2
+  }
+    package "value encryption" {
+            [ encrypted value ] as ev
+            [ clear value ] as cv
+    }
+
+    [ sops file ] as file
+
+    cv --> ev
+    mk ..> ev
+    ev --> file
+    mk --> emk1
+    gpg1 .> emk1
+    mk --> emk2
+    gpg2 .> emk2
+    emk1 --> file
+    emk2 --> file
+    gpg1 --> file
+    gpg2 --> file
+
+    @enduml
+#+end_src
+
+#+RESULTS:
+[[file:encrypt.png]]
+
+
