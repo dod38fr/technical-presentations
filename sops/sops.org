@@ -3,7 +3,7 @@
 #+email: dominique@code-straight.fr
 #+OPTIONS: ^:{}
 
-* COMMENT Qui suis-je ?
+* Qui suis-je ?
 
 - Dominique Dumont (@dod38fr)
 - Debian Developer since 2011
