@@ -140,6 +140,10 @@ Chiffrage (simplifié):
 
 Voici les [[https://github.com/getsops/sops?tab=readme-ov-file#6encryption-protocol][détails]] du protocole de chiffrage
 
+* Anatomie du fichier chiffré
+
+[[./sops-file-explained.png]]
+
 * Alternatives
 
 - [[https://www.agwa.name/projects/git-crypt/][git-crypt]]:
