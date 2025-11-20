@@ -185,6 +185,11 @@ Ces commandes peuvent aussi commiter par /hunk/.
 #+ATTR_HTML: :style max-width: 80%
 [[file:git-gui-stage-lines.png]]
 
+** Ajouter une annotation
+
+- ajoute de l'information à un commit sans le changer
+- =git notes add -m "more context" <commit>=
+
 * Et les tests avant commit ?
 
 Rappel:
