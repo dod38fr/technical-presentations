@@ -40,13 +40,13 @@ file:git-show.png
 
 * Pourquoi fait-on des commits ?
 
-- Pour aider le mainteneur du code
-- Peut-être vous dans 6 mois
+- Pour aider le mainteneur du code (vous dans quelques mois ?)
 - Pour faciliter les recherches de régression (~git bisect~)
 - Pour aider l'analyse du code
 - Pour faciliter la revue de code
 
 * Que faut-il pour analyser le code
+* Que faut-il pour analyser le code ?
 
 - Les bonnes pratiques pour un commit:
   - Un résumé du changement en 1^{ère} ligne
@@ -89,6 +89,10 @@ Date:   Sat Nov 23 19:09:34 2019 +0100
     4. goto 1.
 #+END_SRC
 
+** Autre exemple: linux kernel
+
+[[https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=00fbff75c5acb4755f06f08bd1071879c63940c5][crash: fix crashkernel resource shrink]]
+
 * Les techniques pour un commit atomique
 
 ** Si un refactoring est nécessaire
@@ -96,8 +100,8 @@ Date:   Sat Nov 23 19:09:34 2019 +0100
 - Archiver le /refactoring/ avant de faire la nouvelle fonction.
 - Archiver un /refactoring/ à la fois
 - Archiver séparément les re-formatages
-- Ne commiter un changement de doc que si il accompagne un changement
-  dans le code
+- Ne commiter un changement sémantique de la doc que si il accompagne
+  un changement dans le code
 
 Attention: Les tests doivent toujours passer (et ne pas être
 modifiés pour le /refactoring/).
@@ -106,26 +110,24 @@ modifiés pour le /refactoring/).
 
 - Phase de développement:
   - TDD: on casse les tests et on répare
-  - commit: les tests doivent passer pour tous les commits (~git bisect~)
-- Phase d'archivage, commiter soit:
-  - le code avec les tests (si pas trop gros)
-  - le code, puis les tests
+  - commit: les tests doivent passer pour tous les commits
+- Phase d'archivage, commiter le code avec les tests
 
 * Si trop enthousiaste
 
 /Oops, j'ai oublié de faire des commits/ 😅
 
-* Quelques notions ...
+** Quelques notions ...
 
 ... pour la suite
 
-** /diff/ and /hunk/
+*** /diff/ and /hunk/
 
 Ici, un /diff/ avec 2 /hunks/:
 
 file:diff-hunk.png
 
-** workspace and index
+*** workspace and index
 
 #+BEGIN_SRC plantuml :file workspace-index.png :eval no-export
 
@@ -195,13 +197,15 @@ sans le /contenu du workspace/ ?
 #+RESULTS:
 [[file:workspace-index-stash.png]]
 
-* Si j'ai fait un commit en vrac ?
+* Si j'ai fait un mauvais commit ?
 
-- Avant ~push~:
-  - ~git rebase -i~
-- Après un ~push~:
-  - demandez pardon aux collègues 😇
-  - évitez un ~push --force~ (peut aggraver le point précédent)
+- ~git rebase -i~
+- =git commit --fixup=amend <commit>=
+  suivi de =git rebase --autosquash=
+
+** demo =git rebase -i=
+
+# reprendre demo git rebase
 
 * Pour plus d'information
 
