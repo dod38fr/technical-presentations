@@ -45,7 +45,30 @@ file:git-show.png
 - Pour aider l'analyse du code
 - Pour faciliter la revue de code
 
-* Que faut-il pour analyser le code
+* C'est quoi =git bisect= ?
+
+=git bisect= est un outils qui permet d'identifier le commit qui a
+introduit un bug.
+
+
+** demo git bisect
+# faire le git rebase -i plus tard
+
+# demo from https://github.com/EvanLovely/git-bisect-example.git
+
+** Limitations
+#+ATTR_REVEAL: :frag (t t)
+- peu utile si le test plante pour d'autres raisons:
+  - chaque commit devrait être fonctionnel
+  - gérer les exceptions avec =git bisect skip=
+- moins utile si le commit identifié est très gros
+
+** Pour aller plus loin
+
+- automatiser les étapes de test:
+  - créer un script dédié au test du bug
+  - lancer =git bisect run mon-script=
+
 * Que faut-il pour analyser le code ?
 
 - Les bonnes pratiques pour un commit:
