@@ -1,0 +1,17 @@
+.pres-image {
+    /* float: right; */
+    /* vertical-align: top; */
+    width: 350px;
+}
+.pres-plot {
+    width: 400px;
+}
+pre.example {
+    font-size: 0.35em;
+}
+.org-src-container {
+    font-size: 0.6em;
+}
+.org-left {
+    font-size: 0.6em;
+}

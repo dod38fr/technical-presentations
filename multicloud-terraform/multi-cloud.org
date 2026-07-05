@@ -1,0 +1,179 @@
+#+TITLE: Multi-cloud avec Terraform
+#+AUTHOR: Dominique Dumont
+#+EMAIL: domi.dumont@free.fr
+#+OPTIONS: timestamp:nil creator:nil num:nil toc:nil ^:{}
+
+#+REVEAL_THEME: beige
+
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pres.css" />
+* Rappel Terraform
+** Langage de description d'infrastructure
+
+- Terraform modifie l'infrastructure pour qu'elle corresponde aux
+  resources déclarées dans le code:
+
+#+begin_src terraform
+    resource "azurerm_virtual_network" "europe" {
+      name                = "europe"
+      location            = azurerm_resource_group.europe.location
+      resource_group_name = azurerm_resource_group.europe.name
+      address_space       = ["10.1.0.0/16"]
+    }
+#+end_src
+
+** Structure d'une unité Terraform:
+
+- =variables= :: les entrées
+- =locals= :: calculs optionels pour transformer les données
+- =resources= :: appel aux APIs du fournisseur cloud
+- =output= :: les sorties
+
+** Modules
+
+- équivalent des librairies: abstrait un ensemble de ressources.
+
+#+begin_src terraform
+  module "vnet" {
+    source              = "terraform-az-modules/vnet/azurerm"
+    version             = "1.0.3"
+    name                = local.name
+    environment         = local.environment
+    resource_group_name = module.resource_group.resource_group_name
+    location            = module.resource_group.resource_group_location
+    address_spaces      = ["10.0.0.0/16"]
+  }
+#+end_src
+  
+** provider
+
+- Liaison entre Terraform et l'API du fournisseur de cloud.
+- on peut configurer plusieurs providers
+
+#+begin_src terraform
+  provider "azurerm" {
+    features {}
+  }
+
+  provider "scaleway" {
+    zone   = "fr-par-1"
+    region = "fr-par"
+  }
+#+end_src
+
+** parties spécifiques et parties communes
+
+- Exemple de parties spécifiques avec des paramètres différents:
+|            | scaleway                   | Azure                        |
+|------------+----------------------------+------------------------------|
+| réseau     | =scaleway_vpc=             | =azurerm_virtual_network=    |
+| VM         | =scaleway_instance_server= | =azurerm_virtual_machine=    |
+| Kubernetes | =scaleway_k8s_cluster=     | =azurerm_kubernetes_cluster= |
+#+REVEAL: split
+- Parties communes:
+  - les variables d'entrées, leur validation
+  - le traitement de ces variables dans un bloc =locals=
+
+* Le problème
+
+- on part d'une description pour un cloud
+- besoin d'écrire une description pour un autre cloud.
+- besoin de lancer ça dans une CI/CD ➡️ quelle interface ?
+
+* Methodologies
+
+** Dupliquer les repos
+
+- Avantages:
+  - facile à mettre en place
+  - peut répartir sur 2 équipes
+- Inconvénients
+  - duplication des parties communes
+  - risque de dérives entre les 2 infrastructures
+  - duplication de la CI
+- Convient aux:
+  - petites structures
+  - migration rapides (type Big Bang)
+  
+** Même repo / code différents
+- En résumé:
+  - 1 repo, 1 CI
+  - séparer les cloud dans des répertoires (e.g.: Azure et Scaleway)
+  - un =terraform apply= dans chaque directory
+  - même jeu de variables entre Azure et Scaleway
+  - déployer en même temps
+- moins de risque de dérive
+- difficile à appliquer sur 2 équipes
+
+** Même repo / sous modules différents
+
+*** Identifier les parties différentes et les parties communes
+
+- Analyser l'existant pour identifier et les parties communes
+
+[[file:current.svg]]
+
+** Déplacer les parties spécifiques dans des sous-modules
+
+- les abstractions sont créées en groupant les ressources existantes
+  en blocs fonctionnels.
+
+[[file:refactoring.svg]]
+
+** Pour chaque sous-modules
+
+- définir des entrées/sorties communes (polymorphisme)
+- encapsuler les informations spécifiques qui ne peuvent pas être
+  abstraites.
+- le code générique ne devrait pas accéder à l'intérieurs des
+  encapsulations
+
+** Exemple de sortie encapsulée:
+
+- Pour un module qui définit des rôles:
+
+    #+begin_src hcl
+      output "storage_reader" {
+        value = {
+          azure = {
+            # infos venant d'un sous-module spécifique
+            sa_role = module.azure_roles.storage_reader.sa_role_id
+            blob_role = module.azure_roles.storage_reader.blob_role_id
+          }
+          scw = {
+            # infos venant d'un sous-module spécifique
+            policy_id = module.scw_roles.storage_reader.policy_id
+          }
+        }
+      }
+    #+end_src
+
+** Exemple d'entrée encapsulée
+
+- Variable =deployment_context= contient les données généralement
+  requises par les 2 clouds:
+
+#+begin_src yaml
+    azure:
+      cluster_resource_group_name: xxx
+      platform_subscription_id: xxx
+      tenant_id: xxx
+      subscription_id: xxx
+    scw:
+      project_id: xxx
+      organisation_id: xxx
+#+end_src
+
+** Avantages / Inconvénients
+
+- Avantages:
+  - minimise la duplication de code et le risque de dérive
+- Inconvénients:
+  - complexe à mettre en place
+  - demande un refactoring de préparation
+- Recommandé:
+  - sur les migrations sur plusieurs mois 
+  
+* Links
+
+- [[https://markaicode.com/terraform-multi-cloud-management/][Multi-Cloud Chaos: Managing Terraform Across AWS, GCP, and Azure]]
+

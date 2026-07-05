@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: fig2dev Version 3.2.9a -->
+<!-- CreationDate: 2026-07-05 16:31:07 -->
+<!-- Magnification: 1.45 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="284pt" height="249pt"
+	viewBox="2373 1338 3264 2859">
+<g fill="none">
+<!-- Line -->
+<rect x="2385" y="1350" width="3240" height="2835"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="4050" y="1800" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Generic</text>
+<!-- Text -->
+<text xml:space="preserve" x="3465" y="2565" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Azure</text>
+<!-- Text -->
+<text xml:space="preserve" x="4050" y="3285" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Azure</text>
+<!-- Text -->
+<text xml:space="preserve" x="4500" y="2430" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Generic</text>
+<!-- Text -->
+<text xml:space="preserve" x="2970" y="3825" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Generic</text>
+<!-- Text -->
+<text xml:space="preserve" x="2700" y="1845" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="200" text-anchor="start">Azure</text>
+<!-- Line -->
+<polyline points=" 2385,2745 2386,2746 2388,2747 2393,2749 2400,2754 2411,2759 2425,2767 2443,2777
+ 2465,2790 2491,2805 2523,2822 2558,2842 2599,2864 2644,2889 2693,2917 2746,2946
+ 2803,2978 2863,3011 2926,3045 2991,3081 3059,3118 3127,3156 3197,3194 3268,3233
+ 3338,3271 3408,3309 3478,3346 3546,3382 3613,3418 3678,3452 3742,3485 3803,3517
+ 3862,3547 3919,3575 3973,3602 4024,3627 4073,3650 4120,3671 4164,3691 4206,3709
+ 4245,3725 4282,3739 4316,3752 4349,3763 4380,3772 4410,3780 4453,3790 4493,3796
+ 4530,3800 4565,3801 4597,3800 4628,3796 4657,3790 4684,3781 4710,3771 4734,3759
+ 4757,3746 4780,3731 4801,3716 4821,3699 4841,3682 4860,3665 4878,3647 4896,3629
+ 4913,3610 4930,3592 4946,3574 4961,3557 4975,3539 4988,3522 5001,3505 5012,3488
+ 5021,3472 5030,3455 5036,3438 5040,3420 5042,3400 5041,3380 5038,3358 5032,3335
+ 5024,3312 5014,3288 5001,3263 4988,3237 4972,3211 4955,3184 4937,3157 4918,3129
+ 4899,3101 4878,3073 4858,3044 4836,3016 4815,2988 4794,2960 4773,2932 4752,2905
+ 4731,2878 4711,2851 4691,2825 4671,2799 4651,2774 4631,2749 4611,2724 4590,2700
+ 4570,2678 4550,2655 4529,2633 4507,2612 4484,2590 4461,2569 4437,2548 4413,2527
+ 4388,2506 4362,2486 4336,2466 4310,2445 4284,2425 4257,2405 4230,2385 4203,2365
+ 4176,2345 4150,2325 4124,2304 4098,2284 4072,2264 4047,2243 4023,2222 3999,2201
+ 3976,2180 3953,2158 3931,2137 3910,2115 3890,2092 3870,2070 3849,2046 3829,2021
+ 3809,1995 3789,1968 3769,1940 3749,1910 3728,1878 3707,1844 3685,1809 3662,1773
+ 3640,1735 3617,1696 3594,1657 3571,1618 3550,1580 3529,1543 3509,1509 3491,1476
+ 3474,1447 3460,1422 3448,1401 3439,1383 3431,1370 3426,1361 3423,1355 3421,1351
+ 3420,1350"
+	stroke="#000000" stroke-width="8px" stroke-linejoin="bevel" stroke-dasharray="40 40"/>
+</g>
+</svg>
